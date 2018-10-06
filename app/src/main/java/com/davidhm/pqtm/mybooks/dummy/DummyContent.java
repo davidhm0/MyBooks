@@ -1,6 +1,12 @@
 package com.davidhm.pqtm.mybooks.dummy;
 
+import com.davidhm.pqtm.mybooks.model.BookItem;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,60 +19,81 @@ import java.util.Map;
  */
 public class DummyContent {
 
-    /**
-     * Un Array de elementos de prueba(dummy).
-     */
-    public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    //Un Array de elementos de prueba.
+    public static final List<BookItem> ITEMS = new ArrayList<BookItem>();
 
-    /**
-     * Un Map de elementos de prueba(dummy), por ID.
-     */
-    public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
+    // Un Map de elementos de prueba, por Identificador.
+    public static final Map<String, BookItem> ITEM_MAP = new HashMap<String, BookItem>();
 
+    // El número de elementos de la lista de prueba a crear.
     private static final int COUNT = 25;
 
     static {
         // Añade algunos elementos de prueba.
         for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
+            addItem(createBookItem(i));
         }
-    }
-
-    private static void addItem(DummyItem item) {
-        ITEMS.add(item);
-        ITEM_MAP.put(item.id, item);
-    }
-
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
-
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
     }
 
     /**
-     * Un elemento de prueba (dummy) que representa una pieza de contenido.
+     * Añade un elemento a la lista de elementos y al mapa.
+     *
+     * @param item  el elemento a añadir
      */
-    public static class DummyItem {
-        public final String id;
-        public final String content;
-        public final String details;
+    private static void addItem(BookItem item) {
+        ITEMS.add(item);
+        ITEM_MAP.put(String.valueOf(item.getIdentificador()), item);
+    }
 
-        public DummyItem(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
-        }
+    /**
+     * Crea una nueva instancia de prueba de la clase BookItem (nuevo libro).
+     * En función de la posición del elemento en la lista, genera de forma
+     * automática todos los parámetros necesarios para crear el nuevo elemento.
+     *
+     * @param position  la posición del elemento en la lista de elementos
+     * @return la instancia del elemento BookItem creada
+     */
+    private static BookItem createBookItem(int position) {
+        return new BookItem(position, "Title" + position, "Author" + position,
+                            makeDate(position), "Description " + position, makeUrl(position));
+    }
 
-        @Override
-        public String toString() {
-            return content;
-        }
+    /**
+     * Devuelve una fecha de publicación ficticia (elemento tipo Date) para
+     * los elementos BookItem, a partir de la posición del elemento en la
+     * lista. Por simplificar (solo sirve para hacer pruebas) devuelve fechas
+     * correlativas a partir de una fecha fija concreta.
+     *
+     * @param position  la posición del elemento en la lista de elementos
+     * @return  una fecha ficticia de publicación del libro
+     */
+    private static Date makeDate(int position) {
+        Calendar calendar = new GregorianCalendar(2016, 6, 29 + position);
+        return calendar.getTime();
+    }
+
+    /**
+     * Devuelve un String para simular una URL ficticia, solo a efectos de
+     * prueba.
+     *
+     * @param position  la posición del elemento en la lista de elementos
+     * @return  una URL ficticia
+     */
+    private static String makeUrl(int position) {
+        return ("URL_book_" + position);
+    }
+
+    /**
+     * Devuelve un String con los detalles del libro.
+     *
+     * @param book  el libro
+     * @return  los detalles del libro
+     */
+    public static String makeDetails(BookItem book) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return book.getAutor() +
+                "\n" + dateFormat.format(book.getDataDePublicacion()) +
+                "\n" + book.getDescripcion() +
+                "\n" + book.getUrlImagenDePortada();
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.davidhm.pqtm.mybooks.dummy.DummyContent;
+import com.davidhm.pqtm.mybooks.model.BookItem;
 
 /**
  * Fragmento que representa una pantalla de detalle de un libro (Book).
@@ -26,7 +27,7 @@ public class BookDetailFragment extends Fragment {
     /**
      * El contenido de prueba que este fragmento presenta.
      */
-    private DummyContent.DummyItem mItem;
+    private BookItem mItem;
 
     /**
      * Constructor vacío obligatorio para que el gestor de fragmentos
@@ -49,7 +50,7 @@ public class BookDetailFragment extends Fragment {
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
             if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.content);
+                appBarLayout.setTitle(mItem.getTitulo());
             }
         }
     }
@@ -61,7 +62,7 @@ public class BookDetailFragment extends Fragment {
 
         // Muestra el contenido de prueba como texto en un TextView.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.book_detail)).setText(mItem.details);
+            ((TextView) rootView.findViewById(R.id.book_detail)).setText(DummyContent.makeDetails(mItem));
         }
 
         return rootView;

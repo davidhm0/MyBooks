@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.davidhm.pqtm.mybooks.dummy.DummyContent;
+import com.davidhm.pqtm.mybooks.model.BookItem;
 
 import java.util.List;
 
@@ -74,15 +75,15 @@ public class BookListActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final BookListActivity mParentActivity;
-        private final List<DummyContent.DummyItem> mValues;
+        private final List<BookItem> mValues;
         private final boolean mTwoPane;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DummyContent.DummyItem item = (DummyContent.DummyItem) view.getTag();
+                BookItem item = (BookItem) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(BookDetailFragment.ARG_ITEM_ID, item.id);
+                    arguments.putString(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
                     BookDetailFragment fragment = new BookDetailFragment();
                     fragment.setArguments(arguments);
                     mParentActivity.getSupportFragmentManager().beginTransaction()
@@ -91,7 +92,7 @@ public class BookListActivity extends AppCompatActivity {
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, BookDetailActivity.class);
-                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, item.id);
+                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
 
                     context.startActivity(intent);
                 }
@@ -99,7 +100,7 @@ public class BookListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(BookListActivity parent,
-                                      List<DummyContent.DummyItem> items,
+                                      List<BookItem> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;
@@ -115,8 +116,8 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).id);
-            holder.mContentView.setText(mValues.get(position).content);
+            holder.mIdView.setText(mValues.get(position).getTitulo());
+            holder.mContentView.setText(mValues.get(position).getAutor());
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
