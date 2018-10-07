@@ -26,7 +26,7 @@ public class DummyContent {
     public static final Map<String, BookItem> ITEM_MAP = new HashMap<String, BookItem>();
 
     // El número de elementos de la lista de prueba a crear.
-    private static final int COUNT = 25;
+    private static final int COUNT = 2;
 
     static {
         // Añade algunos elementos de prueba.

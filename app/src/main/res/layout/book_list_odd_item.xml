@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout de los elementos impares de la lista de libros -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/colorOddContent">
+
+    <!-- Título del libro -->
+    <include layout="@layout/book_list_title" />
+
+    <!-- Autor del libro -->
+    <include layout="@layout/book_list_author" />
+</LinearLayout>

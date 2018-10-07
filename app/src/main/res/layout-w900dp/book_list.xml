@@ -27,8 +27,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        tools:context="com.davidhm.pqtm.mybooks.BookListActivity"
-        tools:listitem="@layout/book_list_content" />
+        tools:context="com.davidhm.pqtm.mybooks.BookListActivity" />
 
     <FrameLayout
         android:id="@+id/book_detail_container"

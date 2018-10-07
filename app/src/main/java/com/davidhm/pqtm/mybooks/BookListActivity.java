@@ -77,6 +77,7 @@ public class BookListActivity extends AppCompatActivity {
         private final BookListActivity mParentActivity;
         private final List<BookItem> mValues;
         private final boolean mTwoPane;
+        private final int EVEN = 2, ODD = 1;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,17 +108,45 @@ public class BookListActivity extends AppCompatActivity {
             mTwoPane = twoPane;
         }
 
+        /**
+         * Devuelve el valor entero EVEN para elementos de la lista pares y el
+         * valor entero ODD para elementos impares.
+         *
+         * @param position posición en la lista de elementos
+         * @return  EVEN para elementos pares y ODD para elementos impares
+         */
+        @Override
+        public int getItemViewType(int position) {
+            if (position % 2 == 0) {
+                return EVEN;
+            } else {
+                return ODD;
+            }
+        }
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.book_list_content, parent, false);
+            // Selecciona el layout en función de si es un elemento par o impar de la lista
+            View view = null;
+            switch(viewType) {
+                case EVEN:
+                    view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.book_list_even_item, parent, false);
+                    break;
+                case ODD:
+                    view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.book_list_odd_item, parent, false);
+                    break;
+                default:
+                    break;
+            }
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mIdView.setText(mValues.get(position).getTitulo());
-            holder.mContentView.setText(mValues.get(position).getAutor());
+            holder.mTitleView.setText(mValues.get(position).getTitulo());
+            holder.mAuthorView.setText(mValues.get(position).getAutor());
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);
@@ -129,13 +158,13 @@ public class BookListActivity extends AppCompatActivity {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            final TextView mIdView;
-            final TextView mContentView;
+            final TextView mTitleView;
+            final TextView mAuthorView;
 
             ViewHolder(View view) {
                 super(view);
-                mIdView = (TextView) view.findViewById(R.id.id_text);
-                mContentView = (TextView) view.findViewById(R.id.content);
+                mTitleView = (TextView) view.findViewById(R.id.book_list_title);
+                mAuthorView = (TextView) view.findViewById(R.id.book_list_author);
             }
         }
     }
