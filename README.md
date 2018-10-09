@@ -12,4 +12,4 @@ EJERCICIO 3: Utilizar CardView.
 
 CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, datos ficticios y elementos de la lista en forma de objetos tipo CardView.
 
-Ejercicio 3 actualmente en fase de desarrollo
+Ejercicio 3 finalizado y alojado en la rama: pla1_exercici_3
