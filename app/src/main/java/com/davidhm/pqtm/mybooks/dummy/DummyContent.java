@@ -2,7 +2,6 @@ package com.davidhm.pqtm.mybooks.dummy;
 
 import com.davidhm.pqtm.mybooks.model.BookItem;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +24,9 @@ public class DummyContent {
     // Un Map de elementos de prueba, por Identificador.
     public static final Map<String, BookItem> ITEM_MAP = new HashMap<String, BookItem>();
 
+    // Un Map de imágenes de prueba, por URL.
+    public static final Map<String, String> IMAGE_MAP = new HashMap<String, String>();
+
     // El número de elementos de la lista de prueba a crear.
     private static final int COUNT = 2;
 
@@ -32,6 +34,7 @@ public class DummyContent {
         // Añade algunos elementos de prueba.
         for (int i = 1; i <= COUNT; i++) {
             addItem(createBookItem(i));
+            addImage(i);
         }
     }
 
@@ -55,7 +58,17 @@ public class DummyContent {
      */
     private static BookItem createBookItem(int position) {
         return new BookItem(position, "Title" + position, "Author" + position,
-                            makeDate(position), "Description " + position, makeUrl(position));
+                            makeDate(position), "Description " + position,
+                            "URL_book_" + position);
+    }
+
+    /**
+     * Añade la imagen de portada del elemento i al mapa de imágenes.
+     *
+     * @param i número del elemento
+     **/
+    private static void addImage(int i) {
+        IMAGE_MAP.put(ITEMS.get(i-1).getUrlImagenDePortada(), "book_image_" + i);
     }
 
     /**
@@ -70,30 +83,5 @@ public class DummyContent {
     private static Date makeDate(int position) {
         Calendar calendar = new GregorianCalendar(2016, 6, 29 + position);
         return calendar.getTime();
-    }
-
-    /**
-     * Devuelve un String para simular una URL ficticia, solo a efectos de
-     * prueba.
-     *
-     * @param position  la posición del elemento en la lista de elementos
-     * @return  una URL ficticia
-     */
-    private static String makeUrl(int position) {
-        return ("URL_book_" + position);
-    }
-
-    /**
-     * Devuelve un String con los detalles del libro.
-     *
-     * @param book  el libro
-     * @return  los detalles del libro
-     */
-    public static String makeDetails(BookItem book) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return book.getAutor() +
-                "\n" + dateFormat.format(book.getDataDePublicacion()) +
-                "\n" + book.getDescripcion() +
-                "\n" + book.getUrlImagenDePortada();
     }
 }

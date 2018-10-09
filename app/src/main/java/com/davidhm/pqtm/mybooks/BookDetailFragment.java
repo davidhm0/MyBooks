@@ -7,10 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.davidhm.pqtm.mybooks.dummy.DummyContent;
 import com.davidhm.pqtm.mybooks.model.BookItem;
+
+import java.text.SimpleDateFormat;
 
 /**
  * Fragmento que representa una pantalla de detalle de un libro (Book).
@@ -60,9 +63,24 @@ public class BookDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
 
-        // Muestra el contenido de prueba como texto en un TextView.
+        // Muestra el contenido de prueba.
         if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.book_detail)).setText(DummyContent.makeDetails(mItem));
+            //Recupera el nombre de imagen del elemento.
+            String name =  DummyContent.IMAGE_MAP.get(mItem.getUrlImagenDePortada());
+            // Obtiene el identificador de la imagen.
+            int img = getResources().getIdentifier(name, "drawable",
+                    rootView.getContext().getPackageName());
+            //Obtiene la fecha, en formato dd/MM/yyyy.
+            String date = new SimpleDateFormat("dd/MM/yyyy").format(mItem.getDataDePublicacion());
+            // Muestra los detalles del contenido
+            ((ImageView) rootView.findViewById(R.id.book_image)).
+                    setImageResource(img);
+            ((TextView) rootView.findViewById(R.id.book_author)).
+                    setText(mItem.getAutor());
+            ((TextView) rootView.findViewById(R.id.book_date)).
+                    setText(date);
+            ((TextView) rootView.findViewById(R.id.book_description)).
+                    setText(mItem.getDescripcion());
         }
 
         return rootView;
