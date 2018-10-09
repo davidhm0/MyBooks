@@ -8,8 +8,8 @@ AUTOR: David Hernández Martín.
 
 FASE: PAC 1 (prueba de evaluación continua 1).
 
-EJERCICIO 2: Instalación Android y primer esqueleto app.
+EJERCICIO 3: Utilizar CardView.
 
-CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, y datos ficticios.
+CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, datos ficticios y elementos de la lista en forma de objetos tipo CardView.
 
-Ejercicio 2 finalizado y alojado en la rama: pla1_exercici_2
+Ejercicio 3 actualmente en fase de desarrollo
