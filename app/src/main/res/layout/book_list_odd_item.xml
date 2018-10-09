@@ -8,7 +8,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    app:cardBackgroundColor="@color/colorOddContent">
+    app:cardElevation="@dimen/list_item_cardElevation"
+    app:cardCornerRadius="@dimen/list_item_cardCornerRadius"
+    app:cardBackgroundColor="@color/colorOddListItem">
 
     <!-- Título y autor del libro -->
     <include layout="@layout/book_list_common_content" />

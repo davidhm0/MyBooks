@@ -3,5 +3,6 @@
     <color name="colorPrimary">#5735ea</color>
     <color name="colorPrimaryDark">#29189b</color>
     <color name="colorAccent">#d81b60</color>
-    <color name="colorOddContent">#c7d7e6</color>
+    <color name="colorOddListItem">#c3c9ef</color>
+    <color name="colorEvenListItem">#ffffff</color>
 </resources>
