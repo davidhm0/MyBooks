@@ -11,3 +11,5 @@ FASE: PAC 1 (prueba de evaluación continua 1).
 EJERCICIO 2: Instalación Android y primer esqueleto app.
 
 CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, y datos ficticios.
+
+Ejercicio 2 finalizado y alojado en la rama: pla1_exercici_2
