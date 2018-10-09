@@ -2,15 +2,15 @@
 
 <!-- Layout de los elementos impares de la lista de libros -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/colorOddContent">
+    android:layout_margin="16dp"
+    app:cardBackgroundColor="@color/colorOddContent">
 
-    <!-- Título del libro -->
-    <include layout="@layout/book_list_title" />
+    <!-- Título y autor del libro -->
+    <include layout="@layout/book_list_common_content" />
 
-    <!-- Autor del libro -->
-    <include layout="@layout/book_list_author" />
-</LinearLayout>
+</android.support.v7.widget.CardView>

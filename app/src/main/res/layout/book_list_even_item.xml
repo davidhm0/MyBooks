@@ -2,14 +2,13 @@
 
 <!-- Layout de los elementos pares de la lista de libros -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="16dp">
 
-    <!-- Título del libro -->
-    <include layout="@layout/book_list_title" />
+    <!-- Título y autor del libro -->
+    <include layout="@layout/book_list_common_content" />
 
-    <!-- Autor del libro -->
-    <include layout="@layout/book_list_author" />
-</LinearLayout>
+</android.support.v7.widget.CardView>
