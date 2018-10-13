@@ -14,8 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.davidhm.pqtm.mybooks.dummy.DummyContent;
-import com.davidhm.pqtm.mybooks.model.BookItem;
+import com.davidhm.pqtm.mybooks.model.BookContent;
 
 import java.util.List;
 
@@ -68,20 +67,20 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, DummyContent.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, BookContent.ITEMS, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
         private final BookListActivity mParentActivity;
-        private final List<BookItem> mValues;
+        private final List<BookContent.BookItem> mValues;
         private final boolean mTwoPane;
         private final int EVEN = 2, ODD = 1;
         private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BookItem item = (BookItem) view.getTag();
+                BookContent.BookItem item = (BookContent.BookItem) view.getTag();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
@@ -101,7 +100,7 @@ public class BookListActivity extends AppCompatActivity {
         };
 
         SimpleItemRecyclerViewAdapter(BookListActivity parent,
-                                      List<BookItem> items,
+                                      List<BookContent.BookItem> items,
                                       boolean twoPane) {
             mValues = items;
             mParentActivity = parent;

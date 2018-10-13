@@ -1,6 +1,4 @@
-package com.davidhm.pqtm.mybooks.dummy;
-
-import com.davidhm.pqtm.mybooks.model.BookItem;
+package com.davidhm.pqtm.mybooks.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,12 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Clase auxiliar para proporcionar contenido de prueba para interfaces de
- * usuario creadas por asistentes de plantillas de Android.
- * <p>
- * TODO: Reemplazar todos los usos de esta clase antes de publicar la aplicación.
+ * Clase auxiliar para proporcionar contenido de prueba.
  */
-public class DummyContent {
+public class BookContent {
 
     //Un Array de elementos de prueba.
     public static final List<BookItem> ITEMS = new ArrayList<BookItem>();
@@ -83,5 +78,53 @@ public class DummyContent {
     private static Date makeDate(int position) {
         Calendar calendar = new GregorianCalendar(2016, 6, 29 + position);
         return calendar.getTime();
+    }
+
+    /**
+     * Clase que define la estructura de cada uno de los elementos a mostrar en el
+     * catálogo de libros.
+     */
+    public static class BookItem {
+
+        private int identificador;
+        private String titulo;
+        private String autor;
+        private Date dataDePublicacion;
+        private String descripcion;
+        private String urlImagenDePortada;
+
+        public BookItem(int identificador, String titulo, String autor, Date dataDePublicacion,
+                        String descripcion, String urlImagenDePortada) {
+            this.identificador = identificador;
+            this.titulo = titulo;
+            this.autor = autor;
+            this.dataDePublicacion = dataDePublicacion;
+            this.descripcion = descripcion;
+            this.urlImagenDePortada = urlImagenDePortada;
+        }
+
+        public int getIdentificador() {
+            return identificador;
+        }
+
+        public String getTitulo() {
+            return titulo;
+        }
+
+        public String getAutor() {
+            return autor;
+        }
+
+        public Date getDataDePublicacion() {
+            return dataDePublicacion;
+        }
+
+        public String getDescripcion() {
+            return descripcion;
+        }
+
+        public String getUrlImagenDePortada() {
+            return urlImagenDePortada;
+        }
     }
 }

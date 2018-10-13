@@ -10,8 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.davidhm.pqtm.mybooks.dummy.DummyContent;
-import com.davidhm.pqtm.mybooks.model.BookItem;
+import com.davidhm.pqtm.mybooks.model.BookContent;
 
 import java.text.SimpleDateFormat;
 
@@ -30,7 +29,7 @@ public class BookDetailFragment extends Fragment {
     /**
      * El contenido de prueba que este fragmento presenta.
      */
-    private BookItem mItem;
+    private BookContent.BookItem mItem;
 
     /**
      * Constructor vacío obligatorio para que el gestor de fragmentos
@@ -48,7 +47,7 @@ public class BookDetailFragment extends Fragment {
             // Cargua el contenido de prueba especificado por los argumentos
             // del fragmento. En un escenario real, usar un cargador (Loader)
             // para cargar contenido de un proveedor de contenido.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mItem = BookContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
 
             Activity activity = this.getActivity();
             CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
@@ -66,7 +65,7 @@ public class BookDetailFragment extends Fragment {
         // Muestra el contenido de prueba.
         if (mItem != null) {
             //Recupera el nombre de imagen del elemento.
-            String name =  DummyContent.IMAGE_MAP.get(mItem.getUrlImagenDePortada());
+            String name =  BookContent.IMAGE_MAP.get(mItem.getUrlImagenDePortada());
             // Obtiene el identificador de la imagen.
             int img = getResources().getIdentifier(name, "drawable",
                     rootView.getContext().getPackageName());
