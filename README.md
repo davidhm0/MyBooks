@@ -6,10 +6,10 @@ PROYECTO: desarrollo de una aplicación de catálogo de libros con la estructura
 
 AUTOR: David Hernández Martín.
 
-FASE: PAC 1 (prueba de evaluación continua 1).
+FASE: PAC 2 (prueba de evaluación continua 2).
 
-EJERCICIO 3: Utilizar CardView.
+EJERCICIO 1: Configurar Firebase.
 
 CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, datos ficticios y elementos de la lista en forma de objetos tipo CardView.
 
-Ejercicio 3 finalizado y alojado en la rama: pla1_exercici_3
+Ejercicio 1 actualmente en desarrollo en la rama: pla2_exercici_1
