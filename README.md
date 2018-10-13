@@ -10,6 +10,6 @@ FASE: PAC 2 (prueba de evaluación continua 2).
 
 EJERCICIO 1: Configurar Firebase.
 
-CONTENIDO: esqueleto inicial de la aplicación, con la estructura master-detail, datos ficticios y elementos de la lista en forma de objetos tipo CardView.
+CONTENIDO: esqueleto inicial de la aplicación, con datos ficticios, elementos de la lista en forma de objetos tipo CardView y Firebase configurado.
 
-Ejercicio 1 actualmente en desarrollo en la rama: pla2_exercici_1
+Ejercicio 1 finalizado y alojado en la rama: pla2_exercici_1
