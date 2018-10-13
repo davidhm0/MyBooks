@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "307406912036",
+    "firebase_url": "https://pqtm-uoc-mybooks-davidhm.firebaseio.com",
+    "project_id": "pqtm-uoc-mybooks-davidhm",
+    "storage_bucket": "pqtm-uoc-mybooks-davidhm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:307406912036:android:5973474077a45ced",
+        "android_client_info": {
+          "package_name": "com.davidhm.pqtm.mybooks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "307406912036-mainodi27fff85cs4q0ut7kb7rl4e7dp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIbnXCqNCTAlLHc3yWefZqHpkxZGdyTJE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
