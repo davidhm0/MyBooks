@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import com.davidhm.pqtm.mybooks.model.BookContent;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 /**
@@ -35,10 +38,18 @@ public class BookListActivity extends AppCompatActivity {
      */
     private boolean mTwoPane;
 
+    // Declara instancias de Firebase
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_list);
+
+        // Inicializa instancias de Firebase
+        mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
