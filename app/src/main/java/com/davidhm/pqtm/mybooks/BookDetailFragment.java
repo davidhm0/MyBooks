@@ -57,7 +57,7 @@ public class BookDetailFragment extends Fragment {
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
-            appBarLayout.setTitle(mItem.getTitulo());
+            appBarLayout.setTitle(mItem.getTitle());
         }
 
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
@@ -65,21 +65,21 @@ public class BookDetailFragment extends Fragment {
         // Muestra el contenido de prueba.
         if (mItem != null) {
             //Recupera el nombre de imagen del elemento.
-            String name =  BookContent.IMAGE_MAP.get(mItem.getUrlImagenDePortada());
+            String name =  BookContent.IMAGE_MAP.get(mItem.getUrlImage());
             // Obtiene el identificador de la imagen.
             int img = getResources().getIdentifier(name, "drawable",
                     rootView.getContext().getPackageName());
             //Obtiene la fecha, en formato dd/MM/yyyy.
-            String date = new SimpleDateFormat("dd/MM/yyyy").format(mItem.getDataDePublicacion());
+            String date = new SimpleDateFormat("dd/MM/yyyy").format(mItem.getPublicationDate());
             // Muestra los detalles del contenido
             ((ImageView) rootView.findViewById(R.id.book_image)).
                     setImageResource(img);
             ((TextView) rootView.findViewById(R.id.book_author)).
-                    setText(mItem.getAutor());
+                    setText(mItem.getAuthor());
             ((TextView) rootView.findViewById(R.id.book_date)).
                     setText(date);
             ((TextView) rootView.findViewById(R.id.book_description)).
-                    setText(mItem.getDescripcion());
+                    setText(mItem.getDescription());
         }
 
         return rootView;

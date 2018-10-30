@@ -274,8 +274,8 @@ public class BookListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mTitleView.setText(mValues.get(position).getTitulo());
-            holder.mAuthorView.setText(mValues.get(position).getAutor());
+            holder.mTitleView.setText(mValues.get(position).getTitle());
+            holder.mAuthorView.setText(mValues.get(position).getAuthor());
 
             holder.itemView.setTag(mValues.get(position));
             holder.itemView.setOnClickListener(mOnClickListener);

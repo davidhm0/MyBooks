@@ -1,5 +1,8 @@
 package com.davidhm.pqtm.mybooks.model;
 
+import com.orm.SugarRecord;
+import com.orm.dsl.Unique;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,7 +68,7 @@ public class BookContent {
      * @param i número del elemento
      **/
     private static void addImage(int i) {
-        IMAGE_MAP.put(ITEMS.get(i-1).getUrlImagenDePortada(), "book_image_" + (i%2+1));
+        IMAGE_MAP.put(ITEMS.get(i-1).getUrlImage(), "book_image_" + (i%2+1));
     }
 
     /**
@@ -86,47 +89,57 @@ public class BookContent {
      * Clase que define la estructura de cada uno de los elementos a mostrar en el
      * catálogo de libros.
      */
-    public static class BookItem {
+    public static class BookItem extends SugarRecord {
 
+        @Unique
         private int identificador;
-        private String titulo;
-        private String autor;
-        private Date dataDePublicacion;
-        private String descripcion;
-        private String urlImagenDePortada;
+        private String title;
+        private String author;
+        private Date publicationDate;
+        private String description;
+        private String urlImage;
 
-        public BookItem(int identificador, String titulo, String autor, Date dataDePublicacion,
-                        String descripcion, String urlImagenDePortada) {
+        // Constructor por defecto, vacío
+        public BookItem() {
+
+        }
+
+        public BookItem(int identificador, String title, String author, Date publicationDate,
+                        String description, String urlImage) {
             this.identificador = identificador;
-            this.titulo = titulo;
-            this.autor = autor;
-            this.dataDePublicacion = dataDePublicacion;
-            this.descripcion = descripcion;
-            this.urlImagenDePortada = urlImagenDePortada;
+            this.title = title;
+            this.author = author;
+            this.publicationDate = publicationDate;
+            this.description = description;
+            this.urlImage = urlImage;
         }
 
         public int getIdentificador() {
             return identificador;
         }
 
-        public String getTitulo() {
-            return titulo;
+        public String getTitle() {
+            return title;
         }
 
-        public String getAutor() {
-            return autor;
+        public String getAuthor() {
+            return author;
         }
 
-        public Date getDataDePublicacion() {
-            return dataDePublicacion;
+        public Date getPublicationDate() {
+            return publicationDate;
         }
 
-        public String getDescripcion() {
-            return descripcion;
+        public String getDescription() {
+            return description;
         }
 
-        public String getUrlImagenDePortada() {
-            return urlImagenDePortada;
+        public String getUrlImage() {
+            return urlImage;
+        }
+
+        public void setIdentificador(int identificador) {
+            this.identificador = identificador;
         }
     }
 }
