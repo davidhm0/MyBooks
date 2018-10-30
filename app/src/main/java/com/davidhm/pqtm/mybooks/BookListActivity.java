@@ -99,6 +99,8 @@ public class BookListActivity extends AppCompatActivity {
             // No hay acceso -> muestra un mensaje al usuario
             Log.d(TAG, "onCreate:no hay acceso a la red");
             showMessage("NO HAY ACCESO A LA RED");
+            // Carga la lista actual de la base de datos local, en el Adapter
+            adapter.setItems(BookContent.getBooks());
         } else {
             // Comprueba si el usuario ya está autenticado en Firebase
             if (mAuth.getCurrentUser() == null) {
@@ -140,6 +142,8 @@ public class BookListActivity extends AppCompatActivity {
     /**
      * Intenta hacer login en el servidor Firebase.
      * Si la autenticación tiene éxito, pide la lista de libros al servidor.
+     * Si falla, carga en el Adapter la lista de libros guardada en la base
+     * de datos local.
      *
      * @param email     email de autenticación en Firebase
      * @param password  contraseña de autenticación en Firebase
@@ -158,6 +162,8 @@ public class BookListActivity extends AppCompatActivity {
                             Log.w(TAG, "signIn:error de autenticación", task.getException());
                             Toast.makeText(BookListActivity.this,
                                     "ERROR DE AUTENTICACIÓN EN FIREBASE", Toast.LENGTH_LONG).show();
+                            // Carga la lista actual de la base de datos local, en el Adapter
+                            adapter.setItems(BookContent.getBooks());
                         }
                     }
                 });
@@ -167,8 +173,11 @@ public class BookListActivity extends AppCompatActivity {
      * Pide la lista de libros al servidor Firebase, y asigna un listener a
      * la referencia obtenida. El método onDataChange es invocado por primera
      * vez cuando se asigna el listener, y cada vez que hay modificaciones en
-     * los datos a los que apunta la referencia.
-     * Cuando es invocado, onDataChange actualiza la base de datos local.
+     * los datos a los que apunta la referencia. El método onCancelled es
+     * invocado si se produce un error en el acceso al servidor.
+     * Cuando onDataChange es invocado, actualiza la base de datos local.
+     * Cuando onCancelled es invocado, carga en el Adaptar la base de datos
+     * local actual.
      */
     private void getFirebaseBookList() {
         database.getReference("books").addValueEventListener(new ValueEventListener() {
@@ -188,6 +197,8 @@ public class BookListActivity extends AppCompatActivity {
                 Log.w(TAG, "onCancelled:error en acceso a base de datos de Firebase", databaseError.toException());
                 Toast.makeText(BookListActivity.this, "Error en acceso a base de datos de Firebase",
                         Toast.LENGTH_LONG).show();
+                // Carga la lista actual de la base de datos local, en el Adapter
+                adapter.setItems(BookContent.getBooks());
             }
         });
     }
