@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -53,6 +54,9 @@ public class BookListActivity extends AppCompatActivity {
     // Adapter del RecyclerView
     private SimpleItemRecyclerViewAdapter adapter;
 
+    // Layout para el refresco del listado de libros
+    private SwipeRefreshLayout swipeContainer;
+
     // Instancias de autenticación y base de datos de Firebase
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -93,6 +97,22 @@ public class BookListActivity extends AppCompatActivity {
         // Establece el Adapter para cargar los elementos de la lista de libros
         adapter = new SimpleItemRecyclerViewAdapter(new ArrayList<BookContent.BookItem>());
         ((RecyclerView)recyclerView).setAdapter(adapter);
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Establece el Listener para el refresco del listado de libros
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // ============ INICIO CODIGO A COMPLETAR ejercicio 4 ===============
+
+                // Pide los libros al servidor para refrescar los datos
+                getFirebaseBookList();
+                swipeContainer.setRefreshing(false);
+                Toast.makeText(BookListActivity.this, "LISTADO REFRESCADO", Toast.LENGTH_LONG).show();
+
+                // ============ FIN CODIGO A COMPLETAR ===============
+            }
+        });
 
         // Comprueba si hay acceso a la Red
         if (!isNetworkConnected()) {
@@ -259,8 +279,6 @@ public class BookListActivity extends AppCompatActivity {
          * @param items la lista de libros a cargar en el Adapter
          */
         public void setItems(List<BookContent.BookItem> items) {
-            // ============ INICIO CODIGO A COMPLETAR ejercicio 3 ===============
-
             // Configura la nueva lista
             mValues.clear();
             mValues.addAll(items);
@@ -269,8 +287,6 @@ public class BookListActivity extends AppCompatActivity {
             // Muestra un mensaje en pantalla si la lista está vacía
             if (mValues.isEmpty())
                 showMessage("EL CATÁLOGO DE LIBROS ESTÁ VACÍO");
-
-            // ============ FIN CODIGO A COMPLETAR ===============
         }
 
         /**
