@@ -86,6 +86,36 @@ public class BookContent {
     }
 
     /**
+     * Devuelve todos los elementos almacenados en la base de datos local.
+     *
+     * @return  los elementos de la base de datos local
+     */
+    public static List<BookItem> getBooks(){
+        // ============ INICIO CODIGO A COMPLETAR ejercicio 3===============
+        return BookItem.listAll(BookItem.class);
+        // ============ FIN CODIGO A COMPLETAR ===============
+    }
+
+    /**
+     * Indica si el elemento pasado como parámetro ya está guardado en la base
+     * de datos local.
+     * Busca los elementos por título.
+     *
+     * @param bookItem  el elemento que se busca en la base de datos
+     * @return  true si el elemento ya está almacenado; false en caso contrario
+     */
+    public static boolean exists(BookItem bookItem) {
+        // ============ INICIO CODIGO A COMPLETAR ejercicio 3 ===============
+        if (bookItem == null) return false;
+        if (BookItem.find(BookItem.class, "title = ?", bookItem.getTitle()).isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+        // ============ FIN CODIGO A COMPLETAR ===============
+    }
+
+    /**
      * Clase que define la estructura de cada uno de los elementos a mostrar en el
      * catálogo de libros.
      */
