@@ -23,7 +23,7 @@ public class BookContent {
     public static final Map<String, String> IMAGE_MAP = new HashMap<String, String>();
 
     // El número de elementos de la lista de prueba a crear.
-    private static final int COUNT = 2;
+    private static final int COUNT = 25;
 
     static {
         // Añade algunos elementos de prueba.
@@ -59,11 +59,13 @@ public class BookContent {
 
     /**
      * Añade la imagen de portada del elemento i al mapa de imágenes.
+     * Por simplificar (solo sirve para hacer pruebas) asigna una imagen a
+     * todos los elementos pares, y otra a los impares.
      *
      * @param i número del elemento
      **/
     private static void addImage(int i) {
-        IMAGE_MAP.put(ITEMS.get(i-1).getUrlImagenDePortada(), "book_image_" + i);
+        IMAGE_MAP.put(ITEMS.get(i-1).getUrlImagenDePortada(), "book_image_" + (i%2+1));
     }
 
     /**
