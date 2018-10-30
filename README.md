@@ -18,4 +18,6 @@ CONTENIDO:
             - Detalles del libro
 
 
-Ejercicio 5 actualmente en desarrollo en la rama: pla2_exercici_5
+Ejercicio 5 finalizado y alojado en la rama: pla2_exercici_5
+
+----------------------- PLA2 FINALIZADA ------------------------------
