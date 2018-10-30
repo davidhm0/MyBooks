@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
@@ -96,8 +97,6 @@ public class BookListActivity extends AppCompatActivity {
         assert recyclerView != null;
         setupRecyclerView((RecyclerView) recyclerView);
 
-        // ============ INICIO CODIGO A COMPLETAR (ejercicio 2) ===============
-
         // Comprueba si hay acceso a la Red
         if (!isNetworkConnected()) {
             // No hay acceso -> muestra un mensaje al usuario
@@ -114,8 +113,6 @@ public class BookListActivity extends AppCompatActivity {
                 getFirebaseBookList();
             }
         }
-
-        // ============ FIN CODIGO A COMPLETAR ===============
     }
 
     /**
@@ -180,10 +177,11 @@ public class BookListActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Recibe modificaciones de la lista de libros de Firebase
-                // Muestra un mensaje.
+                // y actualiza la base de datos local.
                 Log.d(TAG, "onDataChange:recibida lista de libros de Firebase");
                 Toast.makeText(BookListActivity.this, "Recibida lista de libros de Firebase",
                         Toast.LENGTH_LONG).show();
+                updateLocalDatabase(dataSnapshot);
             }
 
             @Override
@@ -194,6 +192,42 @@ public class BookListActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     * Actualiza la base de datos local con la lista recibida de Firebase.
+     * Solo añade a la base de datos aquellos libros que no estaban
+     * previamente almacenados.
+     *
+     * @param dataSnapshot la lista de libros de Firebase
+     */
+    private void updateLocalDatabase(DataSnapshot dataSnapshot) {
+        GenericTypeIndicator<List<BookContent.BookItem>> gtiBookList =
+                new GenericTypeIndicator<List<BookContent.BookItem>>() {};
+        // Convierte datos de Firebase a un List de BookItems
+        List<BookContent.BookItem> bookList = dataSnapshot.getValue(gtiBookList);
+        if (bookList != null) {
+            // Actualiza la base de datos local
+            for (BookContent.BookItem fbBook : bookList) {
+                if (!BookContent.exists(fbBook)) {
+                    // Añade un nuevo libro a la base de datos local
+                    fbBook.save();
+                    // Asigna el id del nuevo registro al campo 'identificador' del libro
+                    fbBook.setIdentificador(fbBook.getId().intValue());
+                    fbBook.update();
+                    // Log
+                    Log.d(TAG, "updateLocalDatabase:añadido nuevo libro a BD: SugarID = " + fbBook.getId()
+                            + "; identificador = " + fbBook.getIdentificador()
+                            + "; title = " + fbBook.getTitle()
+                            + "; author = " + fbBook.getAuthor()
+                            + "; publicationDate = " + fbBook.getPublicationDate()
+                            + "; urlImage = " + fbBook.getUrlImage()
+                            + "; description = " + fbBook.getDescription().substring(0,15) + " ...");
+                }
+            }
+        }
+        Log.d(TAG, "updateLocalDatabase:Libros en la base de datos SugarORM tras actualización: "
+                + BookContent.BookItem.count(BookContent.BookItem.class));
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {

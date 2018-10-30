@@ -1,8 +1,12 @@
 package com.davidhm.pqtm.mybooks.model;
 
+import android.util.Log;
+
 import com.orm.SugarRecord;
 import com.orm.dsl.Unique;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +19,9 @@ import java.util.Map;
  * Clase auxiliar para proporcionar contenido de prueba.
  */
 public class BookContent {
+
+    // Etiqueta para Logs
+    private static final String TAG = "MyBooks";
 
     //Un Array de elementos de prueba.
     public static final List<BookItem> ITEMS = new ArrayList<BookItem>();
@@ -170,6 +177,24 @@ public class BookContent {
 
         public void setIdentificador(int identificador) {
             this.identificador = identificador;
+        }
+
+        /**
+         * Método utilizado para importar datos de Firebase.
+         * Lee el campo 'publicationDate' de la BBDD de Firebase, como cadena
+         * de texto con formato dd/MM/yyyy, y lo asgina al mismo campo de
+         * BookItem, en formato Date.
+         *
+         * @param publicationDate   fecha en formato dd/MM/yyyy
+         */
+        public void setPublicationDate(String publicationDate) {
+            try {
+                this.publicationDate = new SimpleDateFormat("dd/MM/yyyy").parse(publicationDate);
+            }
+            catch (ParseException ex)
+            {
+                Log.w(TAG, "setPublicationDate:formato de fecha incorrecto", ex);
+            }
         }
     }
 }
