@@ -12,4 +12,4 @@ EJERCICIO 2: Añadir Firebase al proyecto.
 
 CONTENIDO: esqueleto inicial de la aplicación, con datos ficticios, elementos de la lista en forma de objetos tipo CardView y Firebase configurado.
 
-Ejercicio 2 en desarrollo en la rama: pla2_exercici_2
+Ejercicio 2 finalizado y alojado en la rama: pla2_exercici_2
