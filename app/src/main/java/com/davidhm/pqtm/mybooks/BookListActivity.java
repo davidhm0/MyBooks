@@ -103,14 +103,10 @@ public class BookListActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // ============ INICIO CODIGO A COMPLETAR ejercicio 4 ===============
-
                 // Pide los libros al servidor para refrescar los datos
                 getFirebaseBookList();
                 swipeContainer.setRefreshing(false);
                 Toast.makeText(BookListActivity.this, "LISTADO REFRESCADO", Toast.LENGTH_LONG).show();
-
-                // ============ FIN CODIGO A COMPLETAR ===============
             }
         });
 
@@ -321,11 +317,37 @@ public class BookListActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
             holder.mTitleView.setText(mValues.get(position).getTitle());
             holder.mAuthorView.setText(mValues.get(position).getAuthor());
 
             holder.itemView.setTag(mValues.get(position));
+
+            // Pasa el identificador del libro actual a la actividad de detalle
+            // Este identificador siempre coincide con su ID en la base de datos local
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BookContent.BookItem item = (BookContent.BookItem) v.getTag();
+                    if (findViewById(R.id.book_detail_container) != null) {
+                        Bundle arguments = new Bundle();
+                        // Identifica el libro por su identificador (único)
+                        arguments.putString(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
+                        BookDetailFragment fragment = new BookDetailFragment();
+                        fragment.setArguments(arguments);
+                        BookListActivity.this.getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.book_detail_container, fragment)
+                                .commit();
+                    } else {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, BookDetailActivity.class);
+                        // Identifica el libro por su identificador (único)
+                        intent.putExtra(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
+
+                        context.startActivity(intent);
+                    }
+                }
+            });
         }
 
         @Override

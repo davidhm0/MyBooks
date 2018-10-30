@@ -1,6 +1,9 @@
 package com.davidhm.pqtm.mybooks;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +15,9 @@ import android.widget.TextView;
 
 import com.davidhm.pqtm.mybooks.model.BookContent;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 
 /**
@@ -27,9 +33,14 @@ public class BookDetailFragment extends Fragment {
     public static final String ARG_ITEM_ID = "item_id";
 
     /**
-     * El contenido de prueba que este fragmento presenta.
+     * El contenido que este fragmento presenta.
      */
     private BookContent.BookItem mItem;
+
+    /**
+     * La vista que almacenará la imagen del elemento
+     */
+    private ImageView imageView;
 
     /**
      * Constructor vacío obligatorio para que el gestor de fragmentos
@@ -44,16 +55,17 @@ public class BookDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Cargua el contenido de prueba especificado por los argumentos
-            // del fragmento. En un escenario real, usar un cargador (Loader)
-            // para cargar contenido de un proveedor de contenido.
-            mItem = BookContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            // Cargua el contenido especificado por los argumentos del fragmento.
+            // Utiliza el ID del elemento para buscarlo en la base de datos local.
+            mItem = BookContent.BookItem.findById(BookContent.BookItem.class,
+                    Integer.valueOf(getArguments().getString(ARG_ITEM_ID)));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Evita que se pierda el título del detalle cuando se gira la pantalla
         Activity activity = this.getActivity();
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
@@ -62,18 +74,15 @@ public class BookDetailFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
 
-        // Muestra el contenido de prueba.
+        // Muestra el contenido.
         if (mItem != null) {
-            //Recupera el nombre de imagen del elemento.
-            String name =  BookContent.IMAGE_MAP.get(mItem.getUrlImage());
-            // Obtiene el identificador de la imagen.
-            int img = getResources().getIdentifier(name, "drawable",
-                    rootView.getContext().getPackageName());
+            //Recupera la url de imagen de portada.
+            String url =  mItem.getUrlImage();
+            imageView = (ImageView) rootView.findViewById(R.id.book_image);
+            new downloadImage().execute(url);
             //Obtiene la fecha, en formato dd/MM/yyyy.
             String date = new SimpleDateFormat("dd/MM/yyyy").format(mItem.getPublicationDate());
             // Muestra los detalles del contenido
-            ((ImageView) rootView.findViewById(R.id.book_image)).
-                    setImageResource(img);
             ((TextView) rootView.findViewById(R.id.book_author)).
                     setText(mItem.getAuthor());
             ((TextView) rootView.findViewById(R.id.book_date)).
@@ -83,5 +92,34 @@ public class BookDetailFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    /**
+     * Descarga asíncronamente una imagen, a partir de un URL dado, y la coloca
+     * en la vista correspondiente.
+     */
+    private class downloadImage extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... url) {
+            Bitmap image = null;
+            URL imageUrl;
+            try {
+                imageUrl = new URL(url[0]);
+                HttpURLConnection conn = (HttpURLConnection) imageUrl.openConnection();
+                conn.connect();
+                image = BitmapFactory.decodeStream(conn.getInputStream());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            return image;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap map) {
+            super.onPostExecute(map);
+            // Coloca la imagen descargada en la vista
+            imageView.setImageBitmap(map);
+        }
     }
 }
