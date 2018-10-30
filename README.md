@@ -8,8 +8,8 @@ AUTOR: David Hernández Martín.
 
 FASE: PAC 2 (prueba de evaluación continua 2).
 
-EJERCICIO 3: Añadir una base de datos al proyecto.
+EJERCICIO 4: Actualizar la lista de items.
 
-CONTENIDO: elementos de la lista en forma de objetos tipo CardView. Datos obtenidos de Firebase.
+CONTENIDO: elementos de la lista en forma de objetos tipo CardView. Datos obtenidos de Firebase. Base de datos local SugarORM
 
-Ejercicio 3 finalizado y alojado en la rama: pla2_exercici_3
+Ejercicio 4 actualmente en desarrollo en la rama: pla2_exercici_4
