@@ -32,6 +32,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,7 +50,8 @@ public class BookListActivity extends AppCompatActivity {
      * Indica si la actividad está o no en el modo de dos paneles, es decir,
      * si se ejecuta en un dispositivo tipo tableta.
      */
-    private boolean mTwoPane;
+    // Adapter del RecyclerView
+    private SimpleItemRecyclerViewAdapter adapter;
 
     // Instancias de autenticación y base de datos de Firebase
     private FirebaseAuth mAuth;
@@ -85,17 +87,12 @@ public class BookListActivity extends AppCompatActivity {
             }
         });
 
-        if (findViewById(R.id.book_detail_container) != null) {
-            // La vista de detalle del elemento estará presente solo en
-            // diseños de pantalla grande (res/values-w900dp).
-            // Si esta vista está presente, entonces la
-            // actividad estará en modo de dos paneles.
-            mTwoPane = true;
-        }
-
         View recyclerView = findViewById(R.id.book_list);
         assert recyclerView != null;
-        setupRecyclerView((RecyclerView) recyclerView);
+
+        // Establece el Adapter para cargar los elementos de la lista de libros
+        adapter = new SimpleItemRecyclerViewAdapter(new ArrayList<BookContent.BookItem>());
+        ((RecyclerView)recyclerView).setAdapter(adapter);
 
         // Comprueba si hay acceso a la Red
         if (!isNetworkConnected()) {
@@ -171,6 +168,7 @@ public class BookListActivity extends AppCompatActivity {
      * la referencia obtenida. El método onDataChange es invocado por primera
      * vez cuando se asigna el listener, y cada vez que hay modificaciones en
      * los datos a los que apunta la referencia.
+     * Cuando es invocado, onDataChange actualiza la base de datos local.
      */
     private void getFirebaseBookList() {
         database.getReference("books").addValueEventListener(new ValueEventListener() {
@@ -195,7 +193,8 @@ public class BookListActivity extends AppCompatActivity {
     }
 
     /**
-     * Actualiza la base de datos local con la lista recibida de Firebase.
+     * Actualiza la base de datos local con la lista recibida de Firebase y
+     * carga la nueva lista en el Adapter.
      * Solo añade a la base de datos aquellos libros que no estaban
      * previamente almacenados.
      *
@@ -212,7 +211,7 @@ public class BookListActivity extends AppCompatActivity {
                 if (!BookContent.exists(fbBook)) {
                     // Añade un nuevo libro a la base de datos local
                     fbBook.save();
-                    // Asigna el id del nuevo registro al campo 'identificador' del libro
+                    // Asigna el id del nuevo registro al campo 'identificador' del libro (único)
                     fbBook.setIdentificador(fbBook.getId().intValue());
                     fbBook.update();
                     // Log
@@ -226,49 +225,41 @@ public class BookListActivity extends AppCompatActivity {
                 }
             }
         }
+        // Carga la lista de libros, una vez actualizada, en el Adapter
+        adapter.setItems(BookContent.getBooks());
         Log.d(TAG, "updateLocalDatabase:Libros en la base de datos SugarORM tras actualización: "
                 + BookContent.BookItem.count(BookContent.BookItem.class));
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, BookContent.ITEMS, mTwoPane));
-    }
-
-    public static class SimpleItemRecyclerViewAdapter
+    public class SimpleItemRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
 
-        private final BookListActivity mParentActivity;
         private final List<BookContent.BookItem> mValues;
-        private final boolean mTwoPane;
         private final int EVEN = 2, ODD = 1;
-        private final View.OnClickListener mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                BookContent.BookItem item = (BookContent.BookItem) view.getTag();
-                if (mTwoPane) {
-                    Bundle arguments = new Bundle();
-                    arguments.putString(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
-                    BookDetailFragment fragment = new BookDetailFragment();
-                    fragment.setArguments(arguments);
-                    mParentActivity.getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.book_detail_container, fragment)
-                            .commit();
-                } else {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, BookDetailActivity.class);
-                    intent.putExtra(BookDetailFragment.ARG_ITEM_ID, String.valueOf(item.getIdentificador()));
 
-                    context.startActivity(intent);
-                }
-            }
-        };
-
-        SimpleItemRecyclerViewAdapter(BookListActivity parent,
-                                      List<BookContent.BookItem> items,
-                                      boolean twoPane) {
+        SimpleItemRecyclerViewAdapter(List<BookContent.BookItem> items) {
             mValues = items;
-            mParentActivity = parent;
-            mTwoPane = twoPane;
+        }
+
+        /**
+         * Actualiza la lista de libros del Adapter con la nueva lista recibida
+         * como parámetro.
+         *
+         * @param items la lista de libros a cargar en el Adapter
+         */
+        public void setItems(List<BookContent.BookItem> items) {
+            // ============ INICIO CODIGO A COMPLETAR ejercicio 3 ===============
+
+            // Configura la nueva lista
+            mValues.clear();
+            mValues.addAll(items);
+            // Notifica al Adapter que los datos han cambiado
+            notifyDataSetChanged();
+            // Muestra un mensaje en pantalla si la lista está vacía
+            if (mValues.isEmpty())
+                showMessage("EL CATÁLOGO DE LIBROS ESTÁ VACÍO");
+
+            // ============ FIN CODIGO A COMPLETAR ===============
         }
 
         /**
@@ -312,7 +303,6 @@ public class BookListActivity extends AppCompatActivity {
             holder.mAuthorView.setText(mValues.get(position).getAuthor());
 
             holder.itemView.setTag(mValues.get(position));
-            holder.itemView.setOnClickListener(mOnClickListener);
         }
 
         @Override
