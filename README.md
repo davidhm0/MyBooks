@@ -12,4 +12,4 @@ EJERCICIO 3: Añadir una base de datos al proyecto.
 
 CONTENIDO: elementos de la lista en forma de objetos tipo CardView. Datos obtenidos de Firebase.
 
-Ejercicio 3 actualmente en desarrollo en la rama: pla2_exercici_3
+Ejercicio 3 finalizado y alojado en la rama: pla2_exercici_3
