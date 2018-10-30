@@ -206,8 +206,6 @@ public class BookListActivity extends AppCompatActivity {
                 // Recibe modificaciones de la lista de libros de Firebase
                 // y actualiza la base de datos local.
                 Log.d(TAG, "onDataChange:recibida lista de libros de Firebase");
-                Toast.makeText(BookListActivity.this, "Recibida lista de libros de Firebase",
-                        Toast.LENGTH_LONG).show();
                 updateLocalDatabase(dataSnapshot);
             }
 
@@ -215,8 +213,6 @@ public class BookListActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
                 // Error en el acceso a la base de datos Firebase.
                 Log.w(TAG, "onCancelled:error en acceso a base de datos de Firebase", databaseError.toException());
-                Toast.makeText(BookListActivity.this, "Error en acceso a base de datos de Firebase",
-                        Toast.LENGTH_LONG).show();
                 // Carga la lista actual de la base de datos local, en el Adapter
                 adapter.setItems(BookContent.getBooks());
             }
