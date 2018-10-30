@@ -12,4 +12,4 @@ EJERCICIO 4: Actualizar la lista de items.
 
 CONTENIDO: elementos de la lista en forma de objetos tipo CardView. Datos obtenidos de Firebase. Base de datos local SugarORM
 
-Ejercicio 4 actualmente en desarrollo en la rama: pla2_exercici_4
+Ejercicio 4 finalizado y alojado en la rama: pla2_exercici_4
