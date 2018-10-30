@@ -48,18 +48,18 @@ public class BookDetailFragment extends Fragment {
             // del fragmento. En un escenario real, usar un cargador (Loader)
             // para cargar contenido de un proveedor de contenido.
             mItem = BookContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getTitulo());
-            }
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Activity activity = this.getActivity();
+        CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
+        if (appBarLayout != null) {
+            appBarLayout.setTitle(mItem.getTitulo());
+        }
+
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
 
         // Muestra el contenido de prueba.
