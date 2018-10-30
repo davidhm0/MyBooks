@@ -8,8 +8,8 @@ AUTOR: David Hernández Martín.
 
 FASE: PAC 2 (prueba de evaluación continua 2).
 
-EJERCICIO 2: Añadir Firebase al proyecto.
+EJERCICIO 3: Añadir una base de datos al proyecto.
 
-CONTENIDO: esqueleto inicial de la aplicación, con datos ficticios, elementos de la lista en forma de objetos tipo CardView y Firebase configurado.
+CONTENIDO: elementos de la lista en forma de objetos tipo CardView. Datos obtenidos de Firebase.
 
-Ejercicio 2 finalizado y alojado en la rama: pla2_exercici_2
+Ejercicio 3 actualmente en desarrollo en la rama: pla2_exercici_2
