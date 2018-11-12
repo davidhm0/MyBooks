@@ -16,6 +16,14 @@
         <meta-data android:name="VERSION" android:value="1" />
         <meta-data android:name="QUERY_LOG" android:value="true" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.davidhm.pqtm.mybooks.model" />
+        <!-- Icono por defecto para notificaciones entrantes -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <!-- Canal de notificaciones por defecto -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
         <activity
             android:name=".BookListActivity"
             android:label="@string/main_activity_name"
@@ -35,6 +43,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.davidhm.pqtm.mybooks.BookListActivity" />
         </activity>
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
