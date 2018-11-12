@@ -19,4 +19,4 @@ CONTENIDO:
             - Notificaciones con Firebase.
 
 
-Ejercicio 1 actualmente en desarrollo en la rama: pla3_exercici_1
+Ejercicio 1 finalizado y alojado en la rama: pla3_exercici_1
