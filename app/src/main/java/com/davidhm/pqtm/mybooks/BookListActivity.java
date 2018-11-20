@@ -1,6 +1,7 @@
 package com.davidhm.pqtm.mybooks;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -110,10 +111,29 @@ public class BookListActivity extends AppCompatActivity {
             }
         });
 
+        // Selecciona la acción a ejecutar
+        if (getIntent() == null || getIntent().getAction() == null) {
+            // Ejecuta la autenticación e intenta cargar los libros desde el servidor
+            executeMain();
+        } else {
+            Log.d(TAG, "onCreate(): Intent action = " + getIntent().getAction());
+            // Ejecuta la acción asociada al Intent
+            executeIntent();
+        }
+    }
+
+    /**
+     * Modo de ejecución cuando se arranca la app.
+     * Comprueba si hay acceso a la red y, en ese caso, intenta autenticarse
+     * en el servidor de Firebase y descargar el catálogo de libros.
+     * Si no es posible, muestra el contenido de la base de datos local.
+     */
+    private void executeMain() {
+        Log.d(TAG, "Se ejecuta executeMain()");
         // Comprueba si hay acceso a la Red
         if (!isNetworkConnected()) {
             // No hay acceso -> muestra un mensaje al usuario
-            Log.d(TAG, "onCreate:no hay acceso a la red");
+            Log.d(TAG, "executeMain(): no hay acceso a la red");
             showMessage("NO HAY ACCESO A LA RED");
             // Carga la lista actual de la base de datos local, en el Adapter
             adapter.setItems(BookContent.getBooks());
@@ -124,9 +144,128 @@ public class BookListActivity extends AppCompatActivity {
                 signIn(mEmail, mPassword);
             } else {
                 // El usuario ya está autenticado -> pide libros al servidor
-                Log.d(TAG, "onCreate:usuario autenticado previamente");
+                Log.d(TAG, "executeMain(): usuario autenticado previamente");
                 getFirebaseBookList();
             }
+        }
+    }
+
+    /**
+     * Selecciona la acción a ejecutar en función del Intent recibido.
+     */
+    private void executeIntent() {
+        // Elimina la notificación de la barra de notificaciones
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE))
+                .cancel(MyFirebaseMessagingService.EXPANDED_NOTIFICATION_ID);
+        // selecciona la acción a realizar
+        switch (getIntent().getAction()) {
+            case MyFirebaseMessagingService.ACTION_DELETE:
+                // Ación de eliminar un libro de la base de datos
+                Log.d(TAG, "executeIntent(): Accion eliminar libro " +
+                        getIntent().getStringExtra(MyFirebaseMessagingService.BOOK_POSITION));
+                deleteBook(getIntent().getStringExtra(MyFirebaseMessagingService.BOOK_POSITION));
+                break;
+            case MyFirebaseMessagingService.ACTION_SHOW_DETAIL:
+                // Acción de mostrar el detalle de un libro
+                Log.d(TAG, "executeIntent(): Accion mostrar detalle libro " +
+                        getIntent().getStringExtra(MyFirebaseMessagingService.BOOK_POSITION));
+                showBookDetail(getIntent().getStringExtra(MyFirebaseMessagingService.BOOK_POSITION));
+                break;
+            default:
+                // Caso android.intent.action.MAIN (inicio de la app)
+                executeMain();
+        }
+    }
+
+    /**
+     * Elimina de la base de datos local el libro indicado en el Intent, y
+     * muestra en la actividad principal el listado de libros que quedan.
+     *
+     * @param bookPosition  Posición del libro seleccionado
+     */
+    private void deleteBook(String bookPosition) {
+        Log.d(TAG, "Se ejecuta deleteBook()");
+
+        // Si no existe el libro indicado, carga los libros en la actividad principal y termina
+        String bookId = matchBook(bookPosition);
+        if (bookId == null) {
+            // Mensaje de aviso
+            Toast.makeText(BookListActivity.this,
+                    "NO SE HA ENCONTRADO EL LIBRO SOLICITADO", Toast.LENGTH_LONG).show();
+            adapter.setItems(BookContent.getBooks());
+            return;
+        }
+
+        // Elimina el libro de la base de datos local
+        BookContent.BookItem book = BookContent.BookItem.findById(BookContent.BookItem.class,
+                Integer.valueOf(bookId));
+        book.delete();
+
+        // Visualiza la lista de libros restantes en la base de datos local
+        adapter.setItems(BookContent.getBooks());
+    }
+
+    /**
+     * Muestra el detalle del libro indicado en el Intent. El detalle se
+     * muestra bien en el fragmento de detalle (modo tablet), bien en la
+     * actividad BookDeatilActivity (modo smartphone).
+     *
+     * @param bookPosition  Posición del libro seleccionado
+     */
+    private void showBookDetail(String bookPosition) {
+        Log.d(TAG, "Se ejecuta showBookDetail()");
+        // Carga los libros de la base de datos en la actividad principal
+        adapter.setItems(BookContent.getBooks());
+
+        // Si no existe el libro indicado, muestra un mensaje y termina
+        String bookId = matchBook(bookPosition);
+        if (bookId == null) {
+            Toast.makeText(BookListActivity.this,
+                    "NO SE HA ENCONTRADO EL LIBRO SOLICITADO", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Visualiza el detalle del libro indicado en el Intent
+        if (findViewById(R.id.book_detail_container) != null) {
+            // En el fragmento de detalle (modo tablet)
+            Bundle arguments = new Bundle();
+            // Identifica el libro por su identificador (único)
+            arguments.putString(BookDetailFragment.ARG_ITEM_ID, bookId);
+            BookDetailFragment fragment = new BookDetailFragment();
+            fragment.setArguments(arguments);
+            BookListActivity.this.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.book_detail_container, fragment)
+                    .commit();
+        } else {
+            // En la actividad BookDetailActivity (modo smartphone)
+            Intent intent = new Intent(this, BookDetailActivity.class);
+            // Identifica el libro por su identificador (único)
+            intent.putExtra(BookDetailFragment.ARG_ITEM_ID, bookId);
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Comprueba que el valor de la posición del libro pasado como parámetro
+     * está dentro del rango de valores aceptable para la lista de libros de
+     * la base de datos local.
+     * Si es correcto, devuelve el valor (convertido a String) del identificador
+     * del libro que se encuentra en esa posición.
+     *
+     * @param bookPosition  La posición del libro en la base de datos
+     * @return  el identificador del libro (como String) o null si está fuera de rango
+     */
+    private String matchBook(String bookPosition) {
+        int pos;
+        if (bookPosition == null) {
+            return null;
+        } else {
+            pos = Integer.valueOf(bookPosition);
+        }
+        if (pos < 1 || pos > BookContent.getBooks().size()) {
+            return null;
+        } else {
+            return String.valueOf(BookContent.getBooks().get(pos-1).getIdentificador());
         }
     }
 

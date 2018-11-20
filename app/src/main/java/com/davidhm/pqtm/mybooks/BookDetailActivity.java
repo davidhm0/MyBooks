@@ -65,10 +65,9 @@ public class BookDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             // Esta ID representa el botón 'Home' o 'Up'. En el caso de esta
-            // actividad, se muestra el botón 'Up'. Usa NavUtils para
-            // permitir a los usuarios navegar un nivel hacia arriba
-            // en la estructura de la aplicación.
-            NavUtils.navigateUpTo(this, new Intent(this, BookListActivity.class));
+            // actividad, se muestra el botón 'Up'.
+            // Se ha configurado para realizar la misma función que el botón de vuelta atrás
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);

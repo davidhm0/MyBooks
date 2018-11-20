@@ -17,15 +17,24 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService{
     private static final String TAG = "MyFirebaseMsgService";
-    private static final String NOTIFICACTION_CHANNEL_NAME = "Actualizaciones base de datos";
-    private static final String ACTION_DELETE ="Eliminar_libro";
-    private static final String ACTION_SHOW_DETAIL = "Mostrar_detalle_libro";
     private static final String TEXT_DELETE ="ELIMINAR LIBRO";
     private static final String TEXT_SHOW_DETAIL = "MOSTRAR DETALLE";
     private static final String DEFAULT_NOTIFICATION_TITLE = "Notificación catálogo de libros";
     private static final String DEFAULT_NOTIFICATION_BODY = "Acción requerida";
-    private static final int EXPANDED_NOTIFICATION_ID = 10;
 
+    // Constantes de acceso público
+    public static final String NOTIFICACTION_CHANNEL_NAME = "Actualizaciones base de datos";
+    public static final String ACTION_DELETE ="Eliminar_libro";
+    public static final String ACTION_SHOW_DETAIL = "Mostrar_detalle_libro";
+    public static final int EXPANDED_NOTIFICATION_ID = 10;
+    public static final String BOOK_POSITION = "book_position";
+
+    /**
+     * Llamado la primera vez que se instala la aplicación, y cuando se genera
+     * un nuevo token para el envío de mensajes desde Firebase Cloud Messaging.
+     *
+     * @param s El nuevo token generado
+     */
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
@@ -99,6 +108,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
     /**
      * Crea y muestra una notificación expandida al recibir un mensaje de
      * notificación remoto con carga de datos.
+     * Si en los datos no existe un par clave-valor donde la clave sea igual
+     * a la constante BOOK_POSITION, se considera que los datos son erróneos
+     * y por tanto no se genera la notificación.
      *
      * @param messageTitle  Título a mostrar en la notificación
      * @param messageBody   Texto a mostrar en la notificación
@@ -106,6 +118,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
      */
     private void sendNotification(String messageTitle, String messageBody, Map<String, String> data) {
         Log.d(TAG, "sendNotification(): notificación extendida; data = " + data);
+
+        // Busca la clave book_position en los datos
+        String bookPosition = data.get(BOOK_POSITION);
+        if (bookPosition == null) {
+            Log.d(TAG, "sendNotification(): clave " + BOOK_POSITION +
+                            " no encontrada; no se genera la notificación");
+            // Sale sin generar la notificación
+            return;
+        }
 
         // Establece valores por defecto de título y cuerpo, si no se facilitan
         if (messageTitle == null || messageTitle.trim().isEmpty() ) {
@@ -119,12 +140,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
         Intent intentDelete = new Intent(this, BookListActivity.class);
         intentDelete.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intentDelete.setAction(ACTION_DELETE);
+        intentDelete.putExtra(BOOK_POSITION, bookPosition);
         PendingIntent pendingIntentDelete = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intentDelete, 0);
 
         // Acción mostrar detalle del libro
         Intent intentShowDetail = new Intent(this, BookListActivity.class);
-        intentDelete.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentShowDetail.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intentShowDetail.setAction(ACTION_SHOW_DETAIL);
+        intentShowDetail.putExtra(BOOK_POSITION, bookPosition);
         PendingIntent pendingIntentShowDetail = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intentShowDetail, 0);
 
         // Construye notificación expandida
@@ -135,7 +158,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 .setContentText(messageBody)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setBigContentTitle(DEFAULT_NOTIFICATION_TITLE)
-                        .bigText("Elimina el libro de la lista, o muestra el detalle del libro"))
+                        .bigText("Elimina el libro " + bookPosition + " de la lista, o muestra el detalle del libro"))
                 .addAction(new NotificationCompat.Action(R.drawable.delete, TEXT_DELETE, pendingIntentDelete))
                 .addAction(new NotificationCompat.Action(R.drawable.description, TEXT_SHOW_DETAIL, pendingIntentShowDetail));
 
