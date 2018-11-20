@@ -19,7 +19,7 @@
         <!-- Icono por defecto para notificaciones entrantes -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/notification" />
+            android:resource="@drawable/book" />
         <!-- Canal de notificaciones por defecto -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"

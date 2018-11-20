@@ -6,6 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -94,11 +97,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         // Construye notificación básica
         String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(R.drawable.book)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
+                .setVibrate(new long[]{500, 500})
+                .setLights(Color.BLUE, 500, 500)
+                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
         // Muesta la notificación
@@ -152,10 +159,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         // Construye notificación expandida
         String channelId = getString(R.string.default_notification_channel_id);
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.drawable.notification)
+                .setSmallIcon(R.drawable.book)
                 .setContentTitle(messageTitle)
                 .setContentText(messageBody)
+                .setVibrate(new long[]{500, 500})
+                .setLights(Color.BLUE, 500, 500)
+                .setSound(defaultSoundUri)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .setBigContentTitle(DEFAULT_NOTIFICATION_TITLE)
                         .bigText("Elimina el libro " + bookPosition + " de la lista, o muestra el detalle del libro"))
