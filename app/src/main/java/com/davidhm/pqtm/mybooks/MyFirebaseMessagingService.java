@@ -1,12 +1,11 @@
 package com.davidhm.pqtm.mybooks;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -14,9 +13,25 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService{
     private static final String TAG = "MyFirebaseMsgService";
-    private static final String NOTIFICACTION_CHANNEL_NAME = "MyBooks_Notification_Channel";
+    private static final String NOTIFICACTION_CHANNEL_NAME = "Actualizaciones base de datos";
+    private static final String ACTION_DELETE ="Eliminar_libro";
+    private static final String ACTION_SHOW_DETAIL = "Mostrar_detalle_libro";
+    private static final String TEXT_DELETE ="ELIMINAR LIBRO";
+    private static final String TEXT_SHOW_DETAIL = "MOSTRAR DETALLE";
+    private static final String DEFAULT_NOTIFICATION_TITLE = "Notificación catálogo de libros";
+    private static final String DEFAULT_NOTIFICATION_BODY = "Acción requerida";
+    private static final int EXPANDED_NOTIFICATION_ID = 10;
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        // Muestra el nuevo token en la pantalla de log
+        Log.d(TAG, "onNewToken(): token = " + s);
+    }
 
     /**
      * Llamado cuando se recibe un mensaje remoto.
@@ -25,32 +40,117 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
      */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "onMessageReceived:mensaje recibido de " + remoteMessage.getFrom());
-        if (remoteMessage.getNotification() != null) {
-            // Mostrar una notificación al recibir un mensaje de Firebase
-            sendNotification(remoteMessage.getNotification().getBody());
+        Log.d(TAG, "onMessageReceived(): mensaje recibido de " + remoteMessage.getFrom());
+
+        RemoteMessage.Notification notification = remoteMessage.getNotification();
+        Map<String, String > data = remoteMessage.getData();
+        // Selecciona el tipo de notificación a crear
+        if (!data.isEmpty()) {
+            if (notification == null) {
+                // Crea notificación para mensaje de datos
+                sendNotification("", "", data);
+            } else {
+                // Crea notificación para mensaje de notificación con carga de datos
+                sendNotification(notification.getTitle(), notification.getBody(), data);
+            }
+        }
+        else if (notification != null) {
+            // Crea notificación básica (sin datos)
+            sendBasicNotification(notification.getTitle(), notification.getBody());
         }
     }
 
     /**
-     * Crea y muestra una notificación al recibir un mensaje de Firebase.
-     *
-     * @param messageBody Texto a mostrar en la notificación
-     */
-    private void sendNotification(String messageBody) {
+     * Crea y muestra una notificación básica (sin carga de datos) al recibir
+     * un mensaje de notificación remoto.
+     *
+     * @param messageTitle  Título a mostrar en la notificación
+     * @param messageBody   Texto a mostrar en la notificación
+     */
+    private void sendBasicNotification(String messageTitle, String messageBody) {
+        Log.d(TAG, "sendBasicNotification(): notificación básica");
+
+        // Establece valores por defecto de título y cuerpo, si no se facilitan
+        if (messageTitle == null || messageTitle.trim().isEmpty() ) {
+            messageTitle = DEFAULT_NOTIFICATION_TITLE;
+        }
+        if (messageBody == null || messageBody.trim().isEmpty() ) {
+            messageBody = DEFAULT_NOTIFICATION_BODY;
+        }
+
         Intent intent = new Intent(this, BookListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+
+        // Construye notificación básica
         String channelId = getString(R.string.default_notification_channel_id);
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Notificación de Firebase")
+                .setSmallIcon(R.drawable.notification)
+                .setContentTitle(messageTitle)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
-                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
+
+        // Muesta la notificación
+        notifyNotification(0, channelId, notificationBuilder.build());
+    }
+
+    /**
+     * Crea y muestra una notificación expandida al recibir un mensaje de
+     * notificación remoto con carga de datos.
+     *
+     * @param messageTitle  Título a mostrar en la notificación
+     * @param messageBody   Texto a mostrar en la notificación
+     * @param data  Carga de datos del mensaje
+     */
+    private void sendNotification(String messageTitle, String messageBody, Map<String, String> data) {
+        Log.d(TAG, "sendNotification(): notificación extendida; data = " + data);
+
+        // Establece valores por defecto de título y cuerpo, si no se facilitan
+        if (messageTitle == null || messageTitle.trim().isEmpty() ) {
+            messageTitle = DEFAULT_NOTIFICATION_TITLE;
+        }
+        if (messageBody == null || messageBody.trim().isEmpty() ) {
+            messageBody = DEFAULT_NOTIFICATION_BODY;
+        }
+
+        // Acción eliminar libro
+        Intent intentDelete = new Intent(this, BookListActivity.class);
+        intentDelete.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentDelete.setAction(ACTION_DELETE);
+        PendingIntent pendingIntentDelete = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intentDelete, 0);
+
+        // Acción mostrar detalle del libro
+        Intent intentShowDetail = new Intent(this, BookListActivity.class);
+        intentDelete.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intentShowDetail.setAction(ACTION_SHOW_DETAIL);
+        PendingIntent pendingIntentShowDetail = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intentShowDetail, 0);
+
+        // Construye notificación expandida
+        String channelId = getString(R.string.default_notification_channel_id);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.notification)
+                .setContentTitle(messageTitle)
+                .setContentText(messageBody)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .setBigContentTitle(DEFAULT_NOTIFICATION_TITLE)
+                        .bigText("Elimina el libro de la lista, o muestra el detalle del libro"))
+                .addAction(new NotificationCompat.Action(R.drawable.delete, TEXT_DELETE, pendingIntentDelete))
+                .addAction(new NotificationCompat.Action(R.drawable.description, TEXT_SHOW_DETAIL, pendingIntentShowDetail));
+
+        // Muesta la notificación
+        notifyNotification(EXPANDED_NOTIFICATION_ID, channelId, notificationBuilder.build());
+    }
+
+    /**
+     * Muestra la notificación en el dispositivo.
+     *
+     * @param id    Identificador de la notificación
+     * @param channelId Canal de la notificación
+     * @param notification  Notificación a mostrar
+     */
+    private void notifyNotification(int id, String channelId, Notification notification) {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
@@ -61,7 +161,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                         NotificationManager.IMPORTANCE_DEFAULT);
                 notificationManager.createNotificationChannel(channel);
             }
-            notificationManager.notify(0, notificationBuilder.build());
+            // Muestra la notificación
+            notificationManager.notify(id, notification);
         }
     }
 }
