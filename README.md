@@ -19,4 +19,4 @@ CONTENIDO:
             - Notificaciones expandidas con Firebase.
 
 
-Ejercicio 2 actualmente en desarrollo en la rama: pla3_exercici_2
+Ejercicio 2 finalizado y alojado en la rama: pla3_exercici_2
