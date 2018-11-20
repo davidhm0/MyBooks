@@ -8,7 +8,7 @@ AUTOR: David Hernández Martín.
 
 FASE: PAC 3 (prueba de evaluación continua 3).
 
-EJERCICIO 3: Enviar notificaciones expandidas desde Firebase.
+EJERCICIO 4: Customizar una notificación.
 
 CONTENIDO:
             - Elementos de la lista en forma de objetos tipo CardView.
@@ -19,4 +19,4 @@ CONTENIDO:
             - Notificaciones expandidas con Firebase.
 
 
-Ejercicio 3 finalizado y alojado en la rama: pla3_exercici_3
+Ejercicio 4 actualmente en desarrollo en la rama: pla3_exercici_4
