@@ -6,9 +6,9 @@ PROYECTO: desarrollo de una aplicación de catálogo de libros con la estructura
 
 AUTOR: David Hernández Martín.
 
-FASE: PAC 3 (prueba de evaluación continua 3).
+FASE: PAC 4 (prueba de evaluación continua 4).
 
-EJERCICIO 4: Customizar una notificación.
+EJERCICIO 1: Añadir un menú lateral a la aplicación.
 
 CONTENIDO:
             - Elementos de la lista en forma de objetos tipo CardView.
@@ -17,9 +17,7 @@ CONTENIDO:
             - Refresco de datos.
             - Detalles del libro.
             - Notificaciones expandidas con Firebase.
+            - Menú lateral de la aplicación.
 
 
-Ejercicio 4 finalizado y alojado en la rama: pla3_exercici_4
-
-
------------------------ PLA3 FINALIZADA ------------------------------
+Ejercicio 1 actualmente en desarrollo en la rama: pla4_exercici_1
