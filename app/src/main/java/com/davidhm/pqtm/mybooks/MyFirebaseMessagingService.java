@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -193,6 +194,15 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 NotificationChannel channel = new NotificationChannel(channelId,
                         NOTIFICACTION_CHANNEL_NAME,
                         NotificationManager.IMPORTANCE_DEFAULT);
+                // Customiza el canal de notificaciones
+                channel.setVibrationPattern(new long[]{500, 500});
+                channel.setLightColor(Color.BLUE);
+                channel.enableLights(true);
+                channel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                        new AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                                .build());
                 notificationManager.createNotificationChannel(channel);
             }
             // Muestra la notificación
