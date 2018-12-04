@@ -13,4 +13,7 @@
     <string name="txt_notification_default_message_title">Notificación catálogo de libros</string>
     <string name="txt_notification_default_message_body">Acción requerida</string>
     <string name="txt_notification_big_text">Elimina el libro %1$s de la lista, o muestra el detalle del libro</string>
+    <string name="txt_drawer_item_share_apps">Compartir con otras aplicaciones</string>
+    <string name="txt_drawer_item_copy_details">Copiar al portapapeles</string>
+    <string name="txt_drawer_item_share_whatsapp">Compartir con WhatsApp</string>
 </resources>

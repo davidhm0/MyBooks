@@ -15,4 +15,7 @@
     <string name="txt_notification_default_message_title">Book catalog notification</string>
     <string name="txt_notification_default_message_body">Required action</string>
     <string name="txt_notification_big_text">Remove book %1$s from the list, or show the book\'s detail</string>
+    <string name="txt_drawer_item_share_apps">Share to other apps</string>
+    <string name="txt_drawer_item_copy_details">Copy to clipboard</string>
+    <string name="txt_drawer_item_share_whatsapp">Share in WhatsApp</string>
 </resources>

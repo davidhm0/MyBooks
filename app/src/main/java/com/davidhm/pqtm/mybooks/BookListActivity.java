@@ -31,6 +31,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +71,9 @@ public class BookListActivity extends AppCompatActivity {
     // Parámetros para autenticación en Firebase
     private static final String mEmail = "davidhm0@yahoo.es";
     private static final String mPassword = "pqtm-davidhm";
+
+    // Nombre cuenta de usuario en menú lateral
+    private static final String userName = "David Hernández";
 
     // Etiqueta para Logs
     private static final String TAG = "MyBooks";
@@ -100,6 +111,9 @@ public class BookListActivity extends AppCompatActivity {
             }
         });
 
+        // Configura el Navigation Drawer
+        setupNavigationDrawer();
+
         // Selecciona la acción a ejecutar
         if (getIntent() == null || getIntent().getAction() == null) {
             // Ejecuta la autenticación e intenta cargar los libros desde el servidor
@@ -109,6 +123,50 @@ public class BookListActivity extends AppCompatActivity {
             // Ejecuta la acción asociada al Intent
             executeIntent();
         }
+    }
+
+    /**
+     * Configura el menú lateral (Navigation Drawer) de la aplicación.
+     */
+    private void setupNavigationDrawer() {
+        // Crea el Header
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.color.md_blue_grey_300)
+                .addProfiles(new ProfileDrawerItem()
+                        .withName(userName)
+                        .withEmail(mEmail)
+                        .withIcon(R.drawable.user_avatar))
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        // Crea los items del menú
+        PrimaryDrawerItem shareAppsItem = new PrimaryDrawerItem()
+                .withIdentifier(1)
+                .withName(R.string.txt_drawer_item_share_apps);
+        PrimaryDrawerItem copyDetailsItem = new PrimaryDrawerItem()
+                .withIdentifier(2)
+                .withName(R.string.txt_drawer_item_copy_details);
+        PrimaryDrawerItem shareWhatsappItem = new PrimaryDrawerItem()
+                .withIdentifier(3)
+                .withName(R.string.txt_drawer_item_share_whatsapp);
+
+        // Crea el Navigation Drawer y le añade el Header y los items
+        Drawer mDrawer = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(shareAppsItem,
+                        new DividerDrawerItem(),
+                        copyDetailsItem,
+                        new DividerDrawerItem(),
+                        shareWhatsappItem)
+                .build();
+
     }
 
     /**
