@@ -21,13 +21,8 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService{
     private static final String TAG = "MyFirebaseMsgService";
-    private static final String TEXT_DELETE ="ELIMINAR LIBRO";
-    private static final String TEXT_SHOW_DETAIL = "MOSTRAR DETALLE";
-    private static final String DEFAULT_NOTIFICATION_TITLE = "Notificación catálogo de libros";
-    private static final String DEFAULT_NOTIFICATION_BODY = "Acción requerida";
 
     // Constantes de acceso público
-    public static final String NOTIFICACTION_CHANNEL_NAME = "Actualizaciones base de datos";
     public static final String ACTION_DELETE ="Eliminar_libro";
     public static final String ACTION_SHOW_DETAIL = "Mostrar_detalle_libro";
     public static final int EXPANDED_NOTIFICATION_ID = 10;
@@ -85,10 +80,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         // Establece valores por defecto de título y cuerpo, si no se facilitan
         if (messageTitle == null || messageTitle.trim().isEmpty() ) {
-            messageTitle = DEFAULT_NOTIFICATION_TITLE;
+            messageTitle = getString(R.string.txt_notification_default_message_title);
         }
         if (messageBody == null || messageBody.trim().isEmpty() ) {
-            messageBody = DEFAULT_NOTIFICATION_BODY;
+            messageBody = getString(R.string.txt_notification_default_message_body);
         }
 
         Intent intent = new Intent(this, BookListActivity.class);
@@ -138,10 +133,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
 
         // Establece valores por defecto de título y cuerpo, si no se facilitan
         if (messageTitle == null || messageTitle.trim().isEmpty() ) {
-            messageTitle = DEFAULT_NOTIFICATION_TITLE;
+            messageTitle = getString(R.string.txt_notification_default_message_title);
         }
         if (messageBody == null || messageBody.trim().isEmpty() ) {
-            messageBody = DEFAULT_NOTIFICATION_BODY;
+            messageBody = getString(R.string.txt_notification_default_message_body);
         }
 
         // Acción eliminar libro
@@ -169,10 +164,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
                 .setLights(Color.BLUE, 500, 500)
                 .setSound(defaultSoundUri)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .setBigContentTitle(DEFAULT_NOTIFICATION_TITLE)
-                        .bigText("Elimina el libro " + bookPosition + " de la lista, o muestra el detalle del libro"))
-                .addAction(new NotificationCompat.Action(R.drawable.delete, TEXT_DELETE, pendingIntentDelete))
-                .addAction(new NotificationCompat.Action(R.drawable.description, TEXT_SHOW_DETAIL, pendingIntentShowDetail));
+                        .setBigContentTitle(getText(R.string.txt_notification_default_message_title))
+                        .bigText(String.format(getString(R.string.txt_notification_big_text), bookPosition)))
+                .addAction(new NotificationCompat.Action(R.drawable.delete,
+                        getText(R.string.txt_notification_button_delete_book),
+                        pendingIntentDelete))
+                .addAction(new NotificationCompat.Action(R.drawable.description,
+                        getText(R.string.txt_notification_button_show_detail),
+                        pendingIntentShowDetail));
 
         // Muesta la notificación
         notifyNotification(EXPANDED_NOTIFICATION_ID, channelId, notificationBuilder.build());
@@ -192,7 +191,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService{
             // A partir de android Oreo es necesario un canal de notificaciones.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel(channelId,
-                        NOTIFICACTION_CHANNEL_NAME,
+                        getText(R.string.txt_notification_channel_default_name),
                         NotificationManager.IMPORTANCE_DEFAULT);
                 // Customiza el canal de notificaciones
                 channel.setVibrationPattern(new long[]{500, 500});

@@ -1,6 +1,18 @@
 <resources>
-    <string name="app_name">MyBooks</string>
-    <string name="main_activity_name">PAC4</string>
+    <string name="app_name" translatable="false">MyBooks</string>
+    <string name="main_activity_name" translatable="false">PAC4</string>
     <string name="title_book_detail">Book Detail</string>
-    <string name="default_notification_channel_id">Default_FCM_channel_id</string>
+    <string name="default_notification_channel_id" translatable="false">Default_FCM_channel_id</string>
+    <string name="txt_list_refreshed">LIST REFRESHED</string>
+    <string name="txt_network_unavailable">NO ACCESS TO NETWORK</string>
+    <string name="txt_requested_book_not_found">THE REQUESTED BOOK HAS NOT BEEN FOUND</string>
+    <string name="txt_alert_dialog_positive_button">OK</string>
+    <string name="txt_error_firebase_auth">FIREBASE AUTHENTICATION FAILED</string>
+    <string name="txt_empty_book_catalog">EMPTY BOOK CATALOG</string>
+    <string name="txt_notification_channel_default_name">Database updates</string>
+    <string name="txt_notification_button_delete_book">DELETE BOOK</string>
+    <string name="txt_notification_button_show_detail">SHOW DETAIL</string>
+    <string name="txt_notification_default_message_title">Book catalog notification</string>
+    <string name="txt_notification_default_message_body">Required action</string>
+    <string name="txt_notification_big_text">Remove book %1$s from the list, or show the book\'s detail</string>
 </resources>

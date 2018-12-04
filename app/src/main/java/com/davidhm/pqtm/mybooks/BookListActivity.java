@@ -13,8 +13,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,15 +81,6 @@ public class BookListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         View recyclerView = findViewById(R.id.book_list);
         assert recyclerView != null;
 
@@ -107,7 +96,7 @@ public class BookListActivity extends AppCompatActivity {
                 // Pide los libros al servidor para refrescar los datos
                 getFirebaseBookList();
                 swipeContainer.setRefreshing(false);
-                Toast.makeText(BookListActivity.this, "LISTADO REFRESCADO", Toast.LENGTH_LONG).show();
+                Toast.makeText(BookListActivity.this, R.string.txt_list_refreshed, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -134,7 +123,7 @@ public class BookListActivity extends AppCompatActivity {
         if (!isNetworkConnected()) {
             // No hay acceso -> muestra un mensaje al usuario
             Log.d(TAG, "executeMain(): no hay acceso a la red");
-            showMessage("NO HAY ACCESO A LA RED");
+            showMessage(getString(R.string.txt_network_unavailable));
             // Carga la lista actual de la base de datos local, en el Adapter
             adapter.setItems(BookContent.getBooks());
         } else {
@@ -191,7 +180,7 @@ public class BookListActivity extends AppCompatActivity {
         if (bookId == null) {
             // Mensaje de aviso
             Toast.makeText(BookListActivity.this,
-                    "NO SE HA ENCONTRADO EL LIBRO SOLICITADO", Toast.LENGTH_LONG).show();
+                    R.string.txt_requested_book_not_found, Toast.LENGTH_LONG).show();
             adapter.setItems(BookContent.getBooks());
             return;
         }
@@ -221,7 +210,7 @@ public class BookListActivity extends AppCompatActivity {
         String bookId = matchBook(bookPosition);
         if (bookId == null) {
             Toast.makeText(BookListActivity.this,
-                    "NO SE HA ENCONTRADO EL LIBRO SOLICITADO", Toast.LENGTH_LONG).show();
+                    R.string.txt_requested_book_not_found, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -287,9 +276,11 @@ public class BookListActivity extends AppCompatActivity {
      */
     public void showMessage(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(BookListActivity.this);
-        builder.setMessage(msg).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) { }
-        });
+        builder.setMessage(msg).setPositiveButton(R.string.txt_alert_dialog_positive_button,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -316,7 +307,7 @@ public class BookListActivity extends AppCompatActivity {
                             // La autenticación falla -> muestra un mensaje al usuario.
                             Log.w(TAG, "signIn:error de autenticación", task.getException());
                             Toast.makeText(BookListActivity.this,
-                                    "ERROR DE AUTENTICACIÓN EN FIREBASE", Toast.LENGTH_LONG).show();
+                                    R.string.txt_error_firebase_auth, Toast.LENGTH_LONG).show();
                             // Carga la lista actual de la base de datos local, en el Adapter
                             adapter.setItems(BookContent.getBooks());
                         }
@@ -417,7 +408,7 @@ public class BookListActivity extends AppCompatActivity {
             notifyDataSetChanged();
             // Muestra un mensaje en pantalla si la lista está vacía
             if (mValues.isEmpty())
-                showMessage("EL CATÁLOGO DE LIBROS ESTÁ VACÍO");
+                showMessage(getString(R.string.txt_empty_book_catalog));
         }
 
         /**

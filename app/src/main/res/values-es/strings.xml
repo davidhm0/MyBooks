@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txt_list_refreshed">LISTADO REFRESCADO</string>
+    <string name="title_book_detail">Detalle del libro</string>
+    <string name="txt_network_unavailable">NO HAY ACCESO A LA RED</string>
+    <string name="txt_requested_book_not_found">NO SE HA ENCONTRADO EL LIBRO SOLICITADO</string>
+    <string name="txt_alert_dialog_positive_button">ACEPTAR</string>
+    <string name="txt_error_firebase_auth">ERROR DE AUTENTICACIÓN EN FIREBASE</string>
+    <string name="txt_empty_book_catalog">EL CATÁLOGO DE LIBROS ESTÁ VACÍO</string>
+    <string name="txt_notification_channel_default_name">Actualizaciones base de datos</string>
+    <string name="txt_notification_button_delete_book">ELIMINAR LIBRO</string>
+    <string name="txt_notification_button_show_detail">MOSTRAR DETALLE</string>
+    <string name="txt_notification_default_message_title">Notificación catálogo de libros</string>
+    <string name="txt_notification_default_message_body">Acción requerida</string>
+    <string name="txt_notification_big_text">Elimina el libro %1$s de la lista, o muestra el detalle del libro</string>
+</resources>
