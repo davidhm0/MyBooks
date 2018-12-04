@@ -20,4 +20,4 @@ CONTENIDO:
             - Menú lateral de la aplicación.
 
 
-Ejercicio 1 actualmente en desarrollo en la rama: pla4_exercici_1
+Ejercicio 1 finalizado y alojado en la rama: pla4_exercici_1
