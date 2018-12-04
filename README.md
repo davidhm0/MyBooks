@@ -8,7 +8,7 @@ AUTOR: David Hernández Martín.
 
 FASE: PAC 4 (prueba de evaluación continua 4).
 
-EJERCICIO 1: Añadir un menú lateral a la aplicación.
+EJERCICIO 2: Compartir información.
 
 CONTENIDO:
             - Elementos de la lista en forma de objetos tipo CardView.
@@ -18,6 +18,7 @@ CONTENIDO:
             - Detalles del libro.
             - Notificaciones expandidas con Firebase.
             - Menú lateral de la aplicación.
+            - Compartir información con otras apps.
 
 
-Ejercicio 1 finalizado y alojado en la rama: pla4_exercici_1
+Ejercicio 2 actualmente en desarrollo en la rama: pla4_exercici_2
