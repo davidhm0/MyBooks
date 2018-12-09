@@ -21,4 +21,4 @@ CONTENIDO:
             - Compartir información con otras apps.
 
 
-Ejercicio 2 actualmente en desarrollo en la rama: pla4_exercici_2
+Ejercicio 2 finalizado y alojado en la rama: pla4_exercici_2
