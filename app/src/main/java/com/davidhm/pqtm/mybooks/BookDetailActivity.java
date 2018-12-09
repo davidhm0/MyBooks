@@ -1,14 +1,13 @@
 package com.davidhm.pqtm.mybooks;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 /**
@@ -19,6 +18,11 @@ import android.view.MenuItem;
  */
 public class BookDetailActivity extends AppCompatActivity {
 
+    private static final String TAG ="MyBookDetailActivity";
+
+    // Botón para iniciar el formulario de compra de un libro
+    private FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,12 +30,12 @@ public class BookDetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // Configura el comportamiento del botón flotante
+                setupOnClickFab(view);
             }
         });
 
@@ -58,6 +62,15 @@ public class BookDetailActivity extends AppCompatActivity {
                     .add(R.id.book_detail_container, fragment)
                     .commit();
         }
+    }
+
+    /**
+     * Configura el comportamiento del botón flotante cuando se pulsa sobre el
+     * mismo.
+     */
+
+    private void setupOnClickFab(View view) {
+        Log.d(TAG, "setupOnClickFab(): Botón flotante pulsado");
     }
 
     @Override
