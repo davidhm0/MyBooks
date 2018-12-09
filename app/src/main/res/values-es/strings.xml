@@ -19,4 +19,6 @@
     <string name="txt_to_share">Aplicación Android sobre libros</string>
     <string name="txt_select_app">Compartir con...</string>
     <string name="txt_no_app_available">NINGUNA APLICACIÓN DISPONIBLE</string>
+    <string name="txt_clipboard_copy_successfull">TEXTO COPIADO EN EL PORTAPAPELES</string>
+    <string name="txt_clipboard_label">Texto plano</string>
 </resources>

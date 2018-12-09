@@ -2,6 +2,8 @@ package com.davidhm.pqtm.mybooks;
 
 import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -225,8 +227,17 @@ public class BookListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Copia en el portapapeles un texto dado.
+     */
     private void setupCopyDetails() {
         Log.d(TAG, "setupShareApps: " + getString(R.string.txt_drawer_item_copy_details));
+        ClipboardManager mClipBoard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData mClipData = ClipData.newPlainText(getText(R.string.txt_clipboard_label), getText(R.string.txt_to_share));
+        if (mClipBoard != null ) {
+            mClipBoard.setPrimaryClip(mClipData);
+            Toast.makeText(this, getText(R.string.txt_clipboard_copy_successfull), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void setupShareWhatsapp() {

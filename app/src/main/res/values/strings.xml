@@ -21,4 +21,6 @@
     <string name="txt_to_share">Android application about books</string>
     <string name="txt_select_app">Share with...</string>
     <string name="txt_no_app_available">NO APPLICATION AVAILABLE</string>
+    <string name="txt_clipboard_copy_successfull">TEXT COPIED TO THE CLIPBOARD</string>
+    <string name="txt_clipboard_label">Plain text</string>
 </resources>
