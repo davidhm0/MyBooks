@@ -18,4 +18,7 @@
     <string name="txt_drawer_item_share_apps">Share to other apps</string>
     <string name="txt_drawer_item_copy_details">Copy to clipboard</string>
     <string name="txt_drawer_item_share_whatsapp">Share in WhatsApp</string>
+    <string name="txt_to_share">Android application about books</string>
+    <string name="txt_select_app">Share with...</string>
+    <string name="txt_no_app_available">NO APPLICATION AVAILABLE</string>
 </resources>

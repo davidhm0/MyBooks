@@ -5,10 +5,15 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -38,8 +43,11 @@ import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +79,9 @@ public class BookListActivity extends AppCompatActivity {
     // Parámetros para autenticación en Firebase
     private static final String mEmail = "davidhm0@yahoo.es";
     private static final String mPassword = "pqtm-davidhm";
+
+    // Instancia del menú lateral
+    private Drawer mDrawer;
 
     // Nombre cuenta de usuario en menú lateral
     private static final String userName = "David Hernández";
@@ -148,16 +159,19 @@ public class BookListActivity extends AppCompatActivity {
         // Crea los items del menú
         PrimaryDrawerItem shareAppsItem = new PrimaryDrawerItem()
                 .withIdentifier(1)
-                .withName(R.string.txt_drawer_item_share_apps);
+                .withName(R.string.txt_drawer_item_share_apps)
+                .withSelectable(false);
         PrimaryDrawerItem copyDetailsItem = new PrimaryDrawerItem()
                 .withIdentifier(2)
-                .withName(R.string.txt_drawer_item_copy_details);
+                .withName(R.string.txt_drawer_item_copy_details)
+                .withSelectable(false);
         PrimaryDrawerItem shareWhatsappItem = new PrimaryDrawerItem()
                 .withIdentifier(3)
-                .withName(R.string.txt_drawer_item_share_whatsapp);
+                .withName(R.string.txt_drawer_item_share_whatsapp)
+                .withSelectable(false);
 
         // Crea el Navigation Drawer y le añade el Header y los items
-        Drawer mDrawer = new DrawerBuilder()
+        mDrawer = new DrawerBuilder()
                 .withActivity(this)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(shareAppsItem,
@@ -165,8 +179,98 @@ public class BookListActivity extends AppCompatActivity {
                         copyDetailsItem,
                         new DividerDrawerItem(),
                         shareWhatsappItem)
+                .withSelectedItem(-1)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch((int)drawerItem.getIdentifier()) {
+                            case 1:
+                                // Comparte texto e imagen con las apps disponibles
+                                mDrawer.closeDrawer();
+                                setupShareApps();
+                                break;
+                            case 2:
+                                // Copia texto en el pottapapeles
+                                mDrawer.closeDrawer();
+                                setupCopyDetails();
+                                break;
+                            case 3:
+                                // Comparte texto e imagen con WhatsApp si está disponible
+                                mDrawer.closeDrawer();
+                                setupShareWhatsapp();
+                                break;
+                        }
+                        return true;
+                    }
+                })
                 .build();
 
+    }
+
+    /**
+     * Configura y lanza el intent para compartir un texto dado y el icono de
+     * la app, con cualquier aplicación disponible.
+     */
+    private void setupShareApps() {
+        Log.d(TAG, "setupShareApps: " + getString(R.string.txt_drawer_item_share_apps));
+        Intent shareAppsIntent = new Intent(Intent.ACTION_SEND);
+        shareAppsIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.txt_to_share));
+        shareAppsIntent.putExtra(Intent.EXTRA_STREAM, getImageUriToShare());
+        shareAppsIntent.setType("image/jpeg");
+        shareAppsIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (shareAppsIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(shareAppsIntent, getText(R.string.txt_select_app)));
+        } else {
+            Toast.makeText(this, R.string.txt_no_app_available, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void setupCopyDetails() {
+        Log.d(TAG, "setupShareApps: " + getString(R.string.txt_drawer_item_copy_details));
+    }
+
+    private void setupShareWhatsapp() {
+        Log.d(TAG, "setupShareApps: " + getString(R.string.txt_drawer_item_share_whatsapp));
+    }
+
+    /**
+     * Guarda el icono de la app en el almacenamiento interno del dispositivo
+     * y genera la URI del objeto imagen a compartir.
+     *
+     * @return  la URI de la imagen a compartir
+     */
+    private Uri getImageUriToShare() {
+        // Obtiene el icono de la app a compartir
+        Drawable drawable = getResources().getDrawable(R.mipmap.ic_launcher);
+        // Crea un mapa de bits con las dimensiones del icono de la app, con 4 bytes por pixel
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        // Construye un objeto Canvas, para dibujar en el mapa de bits creado
+        Canvas canvas = new Canvas(bitmap);
+        // Establece los límites dibujables en el mapa de bits
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        // Dibuja el icono en el mapa de bits
+        drawable.draw(canvas);
+
+        // Ruta donde se almacenará el mapa de bits con el icono
+        File imagePath = new File(getFilesDir(), "images/");
+        imagePath.mkdir();      // Crea el directorio si no existe
+
+        // Archivo donde se almacenará el mapa de bits con el icono
+        File imageFile = new File(imagePath.getPath(), "app_icon.png");
+
+        // Guarda el mapa de bits que contiene el icono, en el archivo creado
+        try {
+            FileOutputStream fos = new FileOutputStream(imageFile);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        // Devuelve el URI de la imagen que se va a compartir
+        return FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".fileprovider", imageFile);
     }
 
     /**

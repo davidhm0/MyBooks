@@ -16,4 +16,7 @@
     <string name="txt_drawer_item_share_apps">Compartir con otras aplicaciones</string>
     <string name="txt_drawer_item_copy_details">Copiar al portapapeles</string>
     <string name="txt_drawer_item_share_whatsapp">Compartir con WhatsApp</string>
+    <string name="txt_to_share">Aplicación Android sobre libros</string>
+    <string name="txt_select_app">Compartir con...</string>
+    <string name="txt_no_app_available">NINGUNA APLICACIÓN DISPONIBLE</string>
 </resources>
