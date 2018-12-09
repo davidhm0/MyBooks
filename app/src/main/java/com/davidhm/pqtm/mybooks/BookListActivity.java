@@ -240,8 +240,23 @@ public class BookListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Configura y lanza el intent para compartir un texto dado y el icono de
+     * la app, con WhatsApp.
+     */
     private void setupShareWhatsapp() {
         Log.d(TAG, "setupShareApps: " + getString(R.string.txt_drawer_item_share_whatsapp));
+        Intent shareWhatsappIntent = new Intent(Intent.ACTION_SEND);
+        shareWhatsappIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.txt_to_share));
+        shareWhatsappIntent.putExtra(Intent.EXTRA_STREAM, getImageUriToShare());
+        shareWhatsappIntent.setType("image/jpeg");
+        shareWhatsappIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        shareWhatsappIntent.setPackage("com.whatsapp");
+        if (shareWhatsappIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(shareWhatsappIntent);
+        } else {
+            Toast.makeText(this, R.string.txt_no_whatsapp_available, Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
