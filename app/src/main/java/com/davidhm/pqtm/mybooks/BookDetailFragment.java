@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,21 +28,19 @@ import java.text.SimpleDateFormat;
  * paneles (en tabletas) o en una {@link BookDetailActivity} en los teléfonos.
  */
 public class BookDetailFragment extends Fragment {
-    /**
-     * El argumento del fragmento que representa el ID del elemento que este
-     * fragmento representa.
-     */
+
+    // El argumento del fragmento que representa el ID del elemento que este
+    // fragmento representa.
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * El contenido que este fragmento presenta.
-     */
+    // El contenido que este fragmento presenta.
     private BookContent.BookItem mItem;
 
-    /**
-     * La vista que almacenará la imagen del elemento
-     */
+    // La vista que almacenará la imagen del elemento
     private ImageView imageView;
+
+    // Botón para iniciar el formulario de compra de un libro
+    private FloatingActionButton fab;
 
     /**
      * Constructor vacío obligatorio para que el gestor de fragmentos
@@ -70,6 +70,19 @@ public class BookDetailFragment extends Fragment {
         CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
         if (appBarLayout != null) {
             appBarLayout.setTitle(mItem.getTitle());
+        }
+
+        // El botón para lanzar el formulario de compra de un libro
+        fab = (FloatingActionButton) activity.findViewById(R.id.fab_tablet);
+        if (fab != null) {
+            fab.show();
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Pulsado botón fab_tablet en BookDetailFragment", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });
         }
 
         View rootView = inflater.inflate(R.layout.book_detail, container, false);
