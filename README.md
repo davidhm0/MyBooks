@@ -22,4 +22,7 @@ CONTENIDO:
             - Uso de WebView.
 
 
-Ejercicio 3 actualmente en desarrollo en la rama: pla4_exercici_3
+Ejercicio 3 finalizado y alojado en la rama: pla4_exercici_3
+
+
+----------------------- PRÁCTICA FINALIZADA ------------------------------
