@@ -24,4 +24,6 @@
     <string name="txt_clipboard_copy_successfull">TEXT COPIED TO THE CLIPBOARD</string>
     <string name="txt_clipboard_label">Plain text</string>
     <string name="txt_no_whatsapp_available">WHATSAPP NOT AVAILABLE</string>
+    <string name="txt_purchase_successful">The purchase has been successfully completed</string>
+    <string name="txt_data_form_error">All fields of the purchase form must be filled out</string>
 </resources>

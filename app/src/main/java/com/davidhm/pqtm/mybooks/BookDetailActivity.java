@@ -1,10 +1,9 @@
 package com.davidhm.pqtm.mybooks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
@@ -34,8 +33,9 @@ public class BookDetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Configura el comportamiento del botón flotante
-                setupOnClickFab(view);
+                // Lanza el Intent del formulario de compra del libro
+                Intent webViewIntent = new Intent(view.getContext(), WebViewActivity.class);
+                startActivity(webViewIntent);
             }
         });
 
@@ -62,15 +62,6 @@ public class BookDetailActivity extends AppCompatActivity {
                     .add(R.id.book_detail_container, fragment)
                     .commit();
         }
-    }
-
-    /**
-     * Configura el comportamiento del botón flotante cuando se pulsa sobre el
-     * mismo.
-     */
-
-    private void setupOnClickFab(View view) {
-        Log.d(TAG, "setupOnClickFab(): Botón flotante pulsado");
     }
 
     @Override

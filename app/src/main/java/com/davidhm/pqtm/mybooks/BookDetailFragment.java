@@ -1,13 +1,13 @@
 package com.davidhm.pqtm.mybooks;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,8 +79,9 @@ public class BookDetailFragment extends Fragment {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Snackbar.make(view, "Pulsado botón fab_tablet en BookDetailFragment", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                    // Lanza el Intent del formulario de compra del libro
+                    Intent webViewIntent = new Intent(view.getContext(), WebViewActivity.class);
+                    startActivity(webViewIntent);
                 }
             });
         }

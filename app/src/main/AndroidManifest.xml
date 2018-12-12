@@ -61,6 +61,10 @@
                 android:resource="@xml/my_file_provider_paths" />
         </provider>
 
+        <activity
+            android:name=".WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
