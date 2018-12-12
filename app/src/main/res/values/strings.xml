@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">MyBooks</string>
-    <string name="main_activity_name" translatable="false">PAC4</string>
     <string name="title_book_detail">Book Detail</string>
     <string name="default_notification_channel_id" translatable="false">Default_FCM_channel_id</string>
     <string name="txt_list_refreshed">LIST REFRESHED</string>
